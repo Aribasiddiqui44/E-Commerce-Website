@@ -8,7 +8,7 @@ const { PORT } = require('./constants.js');
 const UserRouter = require('./routes/user.router.js');
 
 dotenv.config({
-    path: './env'
+    path: './.env'
 });
 
 // "immediately invoked function expression" (IIFE)
@@ -27,4 +27,4 @@ dotenv.config({
 })()
 
 //Configuring Router Middleware
-app.use("/user", UserRouter);
+app.use("/user", UserRouter.router);
