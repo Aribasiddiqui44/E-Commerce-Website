@@ -1,4 +1,4 @@
-import mongoose, {Schema, isObjectIdOrHexString} from "mongoose";
+import mongoose, {Schema} from "mongoose";
 
 const productSchema = new Schema({
     title: {

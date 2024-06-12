@@ -59,6 +59,7 @@ const userSchema = new Schema(
             type: String,
 
         }
+        // Payment information of user such as Metamask wallet account acces etc, for transaction processing.
     },
     {
         timestamps: true
