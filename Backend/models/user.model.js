@@ -8,7 +8,7 @@ const userSchema = new Schema(
             type: String,
             required: true,
             unique: true,
-            lowecase: true,
+            lowercase: true,
             trim: true,
             index: true
         },
@@ -39,10 +39,16 @@ const userSchema = new Schema(
             type: String, // cloudinary URL
             required: true,
         },
-        likedBooks: [
+        likedProducts: [
             {
                 type: Schema.Types.ObjectId, // to reference an object
-                ref: "Book"
+                ref: "Product"
+            }
+        ],
+        purchasedProducts: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Product"
             }
         ],
         password: {
