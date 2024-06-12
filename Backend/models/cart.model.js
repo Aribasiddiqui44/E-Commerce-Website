@@ -43,4 +43,14 @@ const cartSchema = new Schema({
     timestamps: true
 });
 
+//Calculating total cost before saving the order.
+cartSchema.pre("save", async function(next){
+    let price = 0
+    for (product of this.productsList){
+        price += product.toalCost;
+    }
+    this.totalPriceOfProductsInCart = price;
+    next();
+});
+
 export const Cart = mongoose.model("Cart", cartSchema)
