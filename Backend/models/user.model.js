@@ -63,12 +63,12 @@ const userSchema = new Schema(
             type: Boolean, 
             default: false
         },
-        likedProducts: [
-            {
-                type: Schema.Types.ObjectId, // to reference an object
-                ref: "Product"
-            }
-        ],
+        // likedProducts: [
+        //     {
+        //         type: Schema.Types.ObjectId, // to reference an object
+        //         ref: "Product"
+        //     }
+        // ],
         purchasedProducts: [
             {
                 type: Schema.Types.ObjectId,
