@@ -39,6 +39,30 @@ const userSchema = new Schema(
             type: String, // cloudinary URL
             required: true,
         },
+        address: {
+            houseNumber: {
+                type: String,
+                required: true,
+                
+            }, city: {
+                type: String,
+                required: true,
+            }, postalCode: {
+                type: Number,
+                required: true
+            }, country: {
+                type: String,
+                required: true
+            }
+        },
+        phoneNumber: {
+            type: Number,
+            required: true
+        },
+        isSeller: {
+            type: Boolean, 
+            default: false
+        },
         likedProducts: [
             {
                 type: Schema.Types.ObjectId, // to reference an object
