@@ -6,6 +6,7 @@ const cartSchema = new Schema({
         ref: "User",
         required: true,
         unique: true,
+        index: true
     },
     productsList: [
         {
