@@ -36,6 +36,10 @@ const orderSchema = new Schema({
     paymentStatus: {
         type: String, // paid and unpaid
         required: true,
+    },
+    transactionId: {
+        type: String,
+        unique: true,
     }
 },
 {
