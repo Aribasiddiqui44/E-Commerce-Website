@@ -33,9 +33,9 @@ const orderSchema = new Schema({
     totalPrice: {
         type: Schema.Types.Decimal128
     },
-    isPaymentDone: {
-        type: Boolean,
-        required: true
+    paymentStatus: {
+        type: String, // paid and unpaid
+        required: true,
     }
 },
 {
