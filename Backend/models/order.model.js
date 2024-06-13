@@ -13,7 +13,7 @@ const orderSchema = new Schema({
         required: true,
         unique: true,
     },
-    orderStatus: { // Processing, Packing, Shipped, Delivery, Delivered.
+    orderStatus: { // Processing, Packing, Shipped, Delivery, Delivered  or Cancelled.
         type: String,
         default: "Processing"
     },
@@ -32,28 +32,33 @@ const orderSchema = new Schema({
             },
             rate: {
                 type: Schema.Types.Decimal128,
-                required: true
+                required: true,
+
             },
             quantity: {
                 type: Number,
                 default: 1,
                 
             },
-            discounts: {
-                type: Schema.Types.Decimal128,    
+            priceBeforeDiscount: {
+                type: Schema.Types.Decimal128
             },
-            preTax: {
+            discount: { // in %
+                type: Schema.Type.Decimal128,
+                default: null
+            },
+            preTaxPrice: { // after discount
                 type: Schema.Types.Decimal128
 
             },
-            afterTax: {
+            afterTaxPrice: {
                 type: Schema.Types.Decimal128
 
             },
-            totalCost: {
-                type: Schema.Types.Decimal128,
-                required: true
-            }
+            // totalCost: {
+            //     type: Schema.Types.Decimal128,
+            //     required: true
+            // }
         }
     ],
     shippingAddress: {
@@ -89,10 +94,38 @@ const orderSchema = new Schema({
         type: String, // paid and unpaid
         required: true,
     },
+    trackingNumber: {
+        type: String,
+        default: "Not given yet."
+    }
 
 },
 {
     timestamps: true
 });
 
+const Tax_rate = 17;
+orderSchema.pre("save", async function(next){
+    try{
+        for(product of this.Products){
+            let rate = parseFloat(product.rate.toString());
+            let discount = parseFloat(product.discount ? product.discount.toString() : '0');
+            product.priceBeforeDiscount = rate*product.quantity;
+            let discountAmount = (discount/100)*product.priceBeforeDiscount;
+    
+            product.preTaxPrice = product.priceBeforeDiscount - discountAmount;
+    
+            product.afterTaxPrice = product.preTaxPrice * (1 + Tax_rate);
+        }
+        const totalAmount = this.Products.reduce((sum, product) => {
+            return sum + parseFloat(product.afterTaxPrice.toString());
+        }, 0);
+
+        this.totalAmount = totalAmount;
+
+        next();
+    }catch(error){
+        next(error);
+    }
+})
 export const Order = mongoose.model("Order", orderSchema)
