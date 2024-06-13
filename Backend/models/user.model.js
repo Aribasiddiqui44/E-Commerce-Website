@@ -39,7 +39,7 @@ const userSchema = new Schema(
             type: String, // cloudinary URL
             required: true,
         },
-        address: {
+        address: { // billing address
             houseNumber: {
                 type: String,
                 required: true,
@@ -63,6 +63,28 @@ const userSchema = new Schema(
             type: Number,
             required: true
         },
+        shippingAddress: [
+            {
+                houseNumber: {
+                    type: String,
+                    required: true,
+                    
+                }, city: {
+                    type: String,
+                    required: true,
+                }, postalCode: {
+                    type: Number,
+                    required: true
+                }, country: {
+                    type: String,
+                    required: true
+                }, otherInformation: {
+                    type: String,
+                    trim: true,
+                    
+                }
+            }
+        ],
         isSeller: {
             type: Boolean, 
             default: false
