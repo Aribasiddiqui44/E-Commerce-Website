@@ -108,7 +108,13 @@ const userSchema = new Schema(
         refreshToken: {
             type: String,
 
-        }
+        },
+        availedCoupons: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Coupon"
+            }
+        ]
         // Payment information of user such as Metamask wallet account acces etc, for transaction processing.
     },
     {
