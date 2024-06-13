@@ -37,4 +37,17 @@ const couponSchema = new Schema({
     timestamps: true
 });
 
+couponSchema.pre("save", async function(next){
+    try{
+        let currentDate = new Date();
+        let futureDate = new Date(currentDate);
+        this.expiryDate = futureDate.setMonth(futureDate.getMonth() + 2);
+
+        next();
+
+    } catch(error){
+        next(error);
+    }
+});
+
 export const Coupon = mongoose.model("Coupon", couponSchema);
