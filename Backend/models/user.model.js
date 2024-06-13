@@ -53,6 +53,10 @@ const userSchema = new Schema(
             }, country: {
                 type: String,
                 required: true
+            }, otherInformation: {
+                type: String,
+                trim: true,
+                
             }
         },
         phoneNumber: {
