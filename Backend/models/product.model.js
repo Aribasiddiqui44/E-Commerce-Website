@@ -38,6 +38,13 @@ const productSchema = new Schema({
         required: true,
         unique: true,
     },
+    features: [
+        {
+            type: String,
+            trim: true
+        }
+
+    ],
     productQuantity: {
         type: Number,
         required: true,
@@ -47,6 +54,13 @@ const productSchema = new Schema({
         ref: "User",
         required: true
     },
+    // sku: {
+    //     price: {},
+    //     quantity: {
+
+    //     },
+    //     description: {}
+    // },
     feedbacks: [
         {
             customerId: {
