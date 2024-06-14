@@ -8,6 +8,7 @@ const { PORT } = require('./constants.js');
 const UserRouter = require('./routes/user.router.js');
 const ProductRouter = require('./routes/product.router.js');
 const CartRouter = require('./routes/cart.router.js');
+const WishlistRouter = require('./routes/wishlist.router.js');
 
 dotenv.config({
     path: './.env'
@@ -32,3 +33,4 @@ dotenv.config({
 app.use("/user", UserRouter);
 app.use("/product", ProductRouter);
 app.use("/cart", CartRouter);
+app.use("/wishlist", WishlistRouter);
