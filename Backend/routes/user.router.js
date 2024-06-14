@@ -11,6 +11,4 @@ router.post("/post", postRegisterUser);
 router.put("/put", putChangeUserInfo);
 router.delete("/delete", deleteUserProfile);
 
-module.exports = {
-    router
-};
+module.exports = router;

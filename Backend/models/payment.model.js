@@ -1,4 +1,6 @@
-import mongoose, {Schema} from "mongoose";
+// import mongoose, {Schema} from "mongoose";
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const paymentSchema = new Schema({
     userId: {
@@ -59,4 +61,6 @@ const paymentSchema = new Schema({
     timestamps: true
 });
 
-export const Payment = mongoose.model("Payment", paymentSchema);
+const Payment = mongoose.model("Payment", paymentSchema);
+
+module.exports = Payment;

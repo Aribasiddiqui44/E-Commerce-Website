@@ -28,5 +28,5 @@ dotenv.config({
 })()
 
 //Configuring Router Middleware
-app.use("/user", UserRouter.router);
-app.use("/product", ProductRouter.router);
+app.use("/user", UserRouter);
+app.use("/product", ProductRouter);

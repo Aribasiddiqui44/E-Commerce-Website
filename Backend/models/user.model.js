@@ -1,7 +1,8 @@
-import mongoose, {Schema} from "mongoose";
+const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
 const JWT = require('jsonwebtoken');
 
+const { Schema } = mongoose;
 const userSchema = new Schema(
     {
         username: {
@@ -175,5 +176,6 @@ userSchema.methods.generateRefreshToken = function () {
         }
     );
 };
+const User = mongoose.model("User", userSchema);
 
-export const User = mongoose.model("User", userSchema)
+module.exports = User;

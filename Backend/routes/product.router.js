@@ -15,6 +15,4 @@ router.post("/post", postAddProduct);
 router.patch("/patch", patchChangeProductField);
 router.delete("/delete", deleteProduct); //only for authorized user mean admin or seller.
 
-module.exports = {
-    router
-}
+module.exports = router;

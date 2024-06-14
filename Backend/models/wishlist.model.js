@@ -1,4 +1,6 @@
-import mongoose, {Schema} from "mongoose";
+// import mongoose, {Schema} from "mongoose";
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const wishlistSchema = new Schema({
     userId: {
@@ -18,4 +20,6 @@ const wishlistSchema = new Schema({
     timestamps: true
 });
 
-export const Wishlist = mongoose.model("Wishlist", wishlistSchema)
+const Wishlist = mongoose.model("Wishlist", wishlistSchema);
+
+module.exports = Wishlist;

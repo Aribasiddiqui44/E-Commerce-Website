@@ -17,7 +17,7 @@ const getUserData = async (req, res) => {
  };
 
 
-export {
+module.exports = {
     getUserData,
     postRegisterUser,
     putChangeUserInfo,

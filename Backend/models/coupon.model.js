@@ -1,4 +1,6 @@
-import mongoose, {Schema} from "mongoose";
+// import mongoose, {Schema} from "mongoose";
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const couponSchema = new Schema({
     code: {
@@ -50,4 +52,6 @@ couponSchema.pre("save", async function(next){
     }
 });
 
-export const Coupon = mongoose.model("Coupon", couponSchema);
+const Coupon = mongoose.model("Coupon", couponSchema);
+
+module.exports = Coupon;

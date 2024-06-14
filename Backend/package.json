@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "implementing authentication and authorization",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "server": "nodemon -r dotenv/config --experimental-json-modules ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,4 +1,6 @@
-import mongoose, {Schema} from "mongoose";
+// import mongoose, {Schema} from "mongoose";
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const orderSchema = new Schema({
     customerId: {
@@ -127,5 +129,6 @@ orderSchema.pre("save", async function(next){
     }catch(error){
         next(error);
     }
-})
-export const Order = mongoose.model("Order", orderSchema)
+});
+const Order = mongoose.model("Order", orderSchema);
+module.exports = Order;

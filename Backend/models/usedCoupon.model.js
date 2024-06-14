@@ -1,4 +1,6 @@
-import mongoose, { Schema } from 'mongoose';
+// import mongoose, { Schema } from 'mongoose';
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const usedCouponSchema = new Schema({
     userId: {
@@ -21,4 +23,6 @@ const usedCouponSchema = new Schema({
     timestamps: true
 });
 
-export const UsedCoupon = mongoose.model("UsedCoupon", usedCouponSchema);
+const UsedCoupon = mongoose.model("UsedCoupon", usedCouponSchema);
+
+module.exports = UsedCoupon;

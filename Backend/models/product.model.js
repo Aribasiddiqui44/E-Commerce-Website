@@ -1,4 +1,5 @@
-import mongoose, {Schema} from "mongoose";
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const productSchema = new Schema({
     title: {
@@ -82,4 +83,6 @@ const productSchema = new Schema({
     timestamps: true
 })
 
-export const Product = mongoose.model("Product", productSchema)
+const Product = mongoose.model("Product", productSchema);
+
+module.exports = Product;

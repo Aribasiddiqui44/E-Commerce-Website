@@ -21,7 +21,7 @@ const  deleteProduct = async (req, res) => {
 
 };
 
-export {
+module.exports = {
     getProducts,
     getProductInfo,
     postAddProduct,
