@@ -54,8 +54,8 @@ const paymentSchema = new Schema({
         }
     },
     token: { // for Stripe or Blockchain based payments.
-        dtype: String,
-        default: null
+        dtype: String
+        // default: null
     }
 },{
     timestamps: true

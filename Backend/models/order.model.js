@@ -46,7 +46,7 @@ const orderSchema = new Schema({
                 type: Schema.Types.Decimal128
             },
             discount: { // in %
-                type: Schema.Type.Decimal128,
+                type: Schema.Types.Decimal128,
                 default: null
             },
             preTaxPrice: { // after discount
