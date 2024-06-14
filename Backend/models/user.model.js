@@ -110,7 +110,7 @@ const userSchema = new Schema(
             type: String,
 
         },
-        availedCoupons: [
+        availedCoupons: [ // stores used coupons information, so that that user cannot use them in future.
             {
                 type: Schema.Types.ObjectId,
                 ref: "Coupon"
