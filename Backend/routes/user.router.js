@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { getUserData,
     postRegisterUser,
     putChangeUserInfo,
-    deleteUserProfile } = require('./../controllers/user.controller.js');
+    deleteUserProfile } = require('../controllers/user.controller.js');
     
 const router = Router();
 

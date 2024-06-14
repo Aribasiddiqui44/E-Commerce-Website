@@ -6,6 +6,7 @@ const { PORT } = require('./constants.js');
 
 // Importing Router middlewares
 const UserRouter = require('./routes/user.router.js');
+const ProductRouter = require('./routes/product.router.js');
 
 dotenv.config({
     path: './.env'
@@ -28,3 +29,4 @@ dotenv.config({
 
 //Configuring Router Middleware
 app.use("/user", UserRouter.router);
+app.use("/product", ProductRouter.router);
