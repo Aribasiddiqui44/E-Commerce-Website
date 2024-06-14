@@ -10,6 +10,7 @@ const ProductRouter = require('./routes/product.router.js');
 const CartRouter = require('./routes/cart.router.js');
 const WishlistRouter = require('./routes/wishlist.router.js');
 const CouponRouter = require('./routes/coupon.router.js');
+const UsedCouponRouter = require('./routes/usedCoupon.router.js');
 
 dotenv.config({
     path: './.env'
@@ -36,3 +37,4 @@ app.use("/product", ProductRouter);
 app.use("/cart", CartRouter);
 app.use("/wishlist", WishlistRouter);
 app.use("/coupon", CouponRouter);
+app.use("/useCoupon", UsedCouponRouter);
