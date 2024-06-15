@@ -161,6 +161,10 @@ const getUserData = async (req, res) => {
 
 
  });
+
+const logoutUser = asyncHandler( async (req, res) => {
+    
+});
  const patchChangeUserInfo = async (req, res) => {
 
  };
@@ -173,6 +177,7 @@ const getUserData = async (req, res) => {
 module.exports = {
     getUserData,
     postLoginUser,
+    logoutUser,
     postRegisterUser,
     patchChangeUserInfo,
     deleteUserProfile
