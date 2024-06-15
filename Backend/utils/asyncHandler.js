@@ -1,12 +1,22 @@
 // async Handler in a promise way.
-const asyncHandler = (requestHandler) => {
-    (req, res, next) => {
-        Promise.resolve(requestHandler(req, res, next)).
-        catch((err) => next(err))
-    }
-}
+// const asyncHandler = (requestHandler) => {
+//     (req, res, next) => {
+//         Promise.resolve(requestHandler(req, res, next))
+//         .catch((err) => next(err))
+//     }
+// };
 
-export {asyncHandler}
+// module.exports = asyncHandler;
+
+// corrected implementation of this , return should be added.
+const asyncHandler = (requestHandler) => {
+    return (req, res, next) => {
+        Promise.resolve(requestHandler(req, res, next))
+            .catch((err) => next(err));
+    };
+};
+
+module.exports = asyncHandler;
 
 // try-catch way to make a asyncHandler.
 
