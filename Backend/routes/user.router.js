@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const { getUserData,
+    postLoginUser,
     postRegisterUser,
     putChangeUserInfo,
     deleteUserProfile 
@@ -24,6 +25,7 @@ router.post(
     ]),
     postRegisterUser
 );
+router.post("/login", postLoginUser);
 router.put("/put", putChangeUserInfo);
 router.delete("/delete", deleteUserProfile);
 

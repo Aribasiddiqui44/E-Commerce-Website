@@ -48,7 +48,7 @@ const getUserData = async (req, res) => {
     };
 
     const avatar = await uploadOnCloudinary(avatarLocalPath);
-    
+
     if(!avatar){
         throw new ApiError(500, "Internal server error when uploading file, so upload file again.")
     };
@@ -76,6 +76,9 @@ const getUserData = async (req, res) => {
 
  });
 
+ const postLoginUser = asyncHandler ( async (req, res) => {
+
+ });
  const putChangeUserInfo = async (req, res) => {
 
  };
@@ -87,6 +90,7 @@ const getUserData = async (req, res) => {
 
 module.exports = {
     getUserData,
+    postLoginUser,
     postRegisterUser,
     putChangeUserInfo,
     deleteUserProfile
