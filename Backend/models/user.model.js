@@ -20,21 +20,25 @@ const userSchema = new Schema(
             trim: true,
         },
         fullName: {
-            firstName: {
-                type: String,
-                required: true,
-                trim: true,
-            },
-            middleName:{
-                type: String,
-                trim: true,
-                default: null,
-            },
-            lastName: {
-                type: String,
-                required: true,
-                trim: true,
-            }
+            // firstName: {
+            //     type: String,
+            //     required: true,
+            //     trim: true,
+            // },
+            // middleName:{
+            //     type: String,
+            //     trim: true,
+            //     default: null,
+            // },
+            // lastName: {
+            //     type: String,
+            //     required: true,
+            //     trim: true,
+            // }
+            type: String,
+            required: true,
+            trim: true,
+             
         },
         avatar: {
             type: String, // cloudinary URL
