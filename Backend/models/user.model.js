@@ -47,17 +47,17 @@ const userSchema = new Schema(
         address: { // billing address
             houseNumber: {
                 type: String,
-                required: true,
+                // required: true,
                 
             }, city: {
                 type: String,
-                required: true,
+                // required: true,
             }, postalCode: {
                 type: Number,
-                required: true
+                // required: true
             }, country: {
                 type: String,
-                required: true
+                // required: true
             }, otherInformation: {
                 type: String,
                 trim: true,
@@ -65,24 +65,23 @@ const userSchema = new Schema(
             }
         },
         phoneNumber: {
-            type: Number,
-            required: true
+            type: Number
         },
         shippingAddress: [
             {
                 houseNumber: {
                     type: String,
-                    required: true,
+                    // required: true,
                     
                 }, city: {
                     type: String,
-                    required: true,
+                    // required: true,
                 }, postalCode: {
                     type: Number,
-                    required: true
+                    // required: true
                 }, country: {
                     type: String,
-                    required: true
+                    // required: true
                 }, otherInformation: {
                     type: String,
                     trim: true,
