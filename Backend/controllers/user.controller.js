@@ -48,6 +48,7 @@ const getUserData = async (req, res) => {
     };
 
     const avatar = await uploadOnCloudinary(avatarLocalPath);
+    
     if(!avatar){
         throw new ApiError(500, "Internal server error when uploading file, so upload file again.")
     };
@@ -72,7 +73,7 @@ const getUserData = async (req, res) => {
     return res.status(201).json(
         new ApiResponse(200, checkUser, "User Registered Successfully")
     );
-    
+
  });
 
  const putChangeUserInfo = async (req, res) => {
