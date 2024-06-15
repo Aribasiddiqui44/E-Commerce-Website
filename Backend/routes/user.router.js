@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { getUserData,
     postLoginUser,
     postRegisterUser,
-    putChangeUserInfo,
+    patchChangeUserInfo,
     deleteUserProfile 
 } = require('../controllers/user.controller.js');
 
@@ -26,7 +26,7 @@ router.post(
     postRegisterUser
 );
 router.post("/login", postLoginUser);
-router.put("/put", putChangeUserInfo);
+router.patch("/put", patchChangeUserInfo);
 router.delete("/delete", deleteUserProfile);
 
 module.exports = router;
