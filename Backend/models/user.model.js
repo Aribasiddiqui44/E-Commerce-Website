@@ -119,7 +119,11 @@ const userSchema = new Schema(
                 type: Schema.Types.ObjectId,
                 ref: "Coupon"
             }
-        ]
+        ],
+        isCompletedProfile: { // coz for order placing address is requried.
+            type: Boolean,
+            default: false
+        }
         // Payment information of user such as Metamask wallet account acces etc, for transaction processing.
     },
     {

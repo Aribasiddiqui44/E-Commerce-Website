@@ -1,4 +1,9 @@
-import { v2 as Cloudinary } from "cloudinary"; // used ALIAS for v2
+// ES6 import
+// import { v2 as Cloudinary } from "cloudinary"; // used ALIAS for v2
+
+// its common JS equivalent
+const Cloudinary = require('cloudinary').v2;
+
 const fs = require("fs");
    
 //configuring cloudinary service.
