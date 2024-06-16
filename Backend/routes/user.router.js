@@ -25,7 +25,9 @@ router.post(
     ]),
     postRegisterUser
 );
-router.post("/login", postLoginUser);
+// router.post("/login", postLoginUser);
+router.route("/login").post(postLoginUser);
+
 router.patch("/put", patchChangeUserInfo);
 router.delete("/delete", deleteUserProfile);
 
