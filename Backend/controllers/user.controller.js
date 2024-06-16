@@ -167,6 +167,7 @@ const getUserData = async (req, res) => {
 
 const logoutUser = asyncHandler( async (req, res) => {
 
+
 });
  const patchChangeUserInfo = async (req, res) => {
 
