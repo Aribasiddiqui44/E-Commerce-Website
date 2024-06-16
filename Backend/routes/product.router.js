@@ -5,7 +5,7 @@ const {
     getProductInfo,
     postAddProduct,
     patchChangeProductField,
-    deleteProduct 
+    patchChangeAvailabilityOfProduct 
     } = require('./../controllers/product.controller.js');
 
 const router = Router();
@@ -21,6 +21,6 @@ router.route(
 router.get("/getinfo", getProductInfo);
 router.post("/post", postAddProduct);
 router.patch("/patch", patchChangeProductField);
-router.delete("/delete", deleteProduct); //only for authorized user mean admin or seller.
+router.patch("/changeAvailability", patchChangeAvailabilityOfProduct); //only for authorized user mean admin or seller.
 
 module.exports = router;

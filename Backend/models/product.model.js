@@ -55,6 +55,10 @@ const productSchema = new Schema({
         ref: "User",
         required: true
     },
+    isAvaiable: {
+        type: Boolean,
+        default: true
+    },
     // sku: {
     //     price: {},
     //     quantity: {

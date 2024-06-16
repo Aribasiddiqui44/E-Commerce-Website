@@ -47,7 +47,7 @@ const patchChangeProductField = async (req, res) => {
 
 };
 
-const  deleteProduct = async (req, res) => {
+const  patchChangeAvailabilityOfProduct = async (req, res) => {
     // for deleting the product, take product id,
     // do not fully delete the product.
     // change the availability of product.
@@ -61,6 +61,6 @@ module.exports = {
     getProductInfo,
     postAddProduct,
     patchChangeProductField,
-    deleteProduct
+    patchChangeAvailabilityOfProduct
 
 }
