@@ -1,10 +1,13 @@
 const { Router } = require('express');
 const { getUserData,
     postLoginUser,
+    logoutUser,
     postRegisterUser,
     patchChangeUserInfo,
     deleteUserProfile 
 } = require('../controllers/user.controller.js');
+
+const verifyJWT = require('./../middlewares/auth.middleware.js');
 
 const upload = require('./../middlewares/multer.middleware.js');
 
@@ -27,6 +30,10 @@ router.post(
 );
 // router.post("/login", postLoginUser);
 router.route("/login").post(postLoginUser);
+router.route("/logout", 
+    verifyJWT,
+    logoutUser
+);
 
 router.patch("/put", patchChangeUserInfo);
 router.delete("/delete", deleteUserProfile);
