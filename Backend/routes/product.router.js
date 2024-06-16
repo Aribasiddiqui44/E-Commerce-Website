@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const {
     getProducts,
+    postProductSearch,
     getProductInfo,
     postAddProduct,
     patchChangeProductField,
@@ -10,6 +11,13 @@ const {
 const router = Router();
 
 router.get("/getall", getProducts);
+
+router.route(
+    "/search"
+).post(
+    postProductSearch
+);
+
 router.get("/getinfo", getProductInfo);
 router.post("/post", postAddProduct);
 router.patch("/patch", patchChangeProductField);

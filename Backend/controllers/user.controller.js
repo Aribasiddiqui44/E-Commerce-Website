@@ -171,7 +171,7 @@ const logoutUser = asyncHandler( async (req, res) => {
         {
             $set: {
                 // refreshToken: undefined
-                
+
                 refreshToken: null
             }
         },
