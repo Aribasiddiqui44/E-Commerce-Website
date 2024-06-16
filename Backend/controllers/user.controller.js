@@ -170,7 +170,9 @@ const logoutUser = asyncHandler( async (req, res) => {
         req.user._id,
         {
             $set: {
-                refreshToken: undefined
+                // refreshToken: undefined
+                
+                refreshToken: null
             }
         },
         {
@@ -198,6 +200,7 @@ const logoutUser = asyncHandler( async (req, res) => {
 
 
 });
+
  const patchChangeUserInfo = async (req, res) => {
 
  };
