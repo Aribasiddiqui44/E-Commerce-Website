@@ -107,9 +107,12 @@ const getUserData = async (req, res) => {
     // generate access and refresh token 
     // send cookie
 
+    // console.log(req.body)
     const {username, password, email} = req.body;
+    // const username = req.body.username;
+    // const 
 
-    if (!username || email){
+    if (!username && !email){
         throw new ApiError(400, "username or email is required");
     };
 
@@ -163,7 +166,7 @@ const getUserData = async (req, res) => {
  });
 
 const logoutUser = asyncHandler( async (req, res) => {
-    
+
 });
  const patchChangeUserInfo = async (req, res) => {
 
