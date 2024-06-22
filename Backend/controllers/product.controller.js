@@ -61,7 +61,9 @@ const postAddProduct = async (req, res) => {
         Quantity
     } = req.body;
 
-    const 
+    res.send(req.user);
+    // const accessToken = req.cookies.accessToken;
+    // if ()
 };
 
 const patchChangeProductField = async (req, res) => {

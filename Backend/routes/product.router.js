@@ -9,7 +9,7 @@ const {
     } = require('./../controllers/product.controller.js');
 
 const upload = require('./../middlewares/multer.middleware.js');
-
+const verifyJWT = require('./../middlewares/auth.middleware.js');
 const router = Router();
 
 router.get("/getall", getProducts);
@@ -23,9 +23,10 @@ router.route(
 router.get("/getinfo", getProductInfo);
 // router.post("/post", postAddProduct);
 router.route("/post").post(
+    verifyJWT,
     upload.fields([
         {
-            name: "product Image",
+            name: "Product Image",
             maxCount: 1
         }
     ]),
