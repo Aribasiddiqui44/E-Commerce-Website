@@ -74,7 +74,7 @@ const productSchema = new Schema({
             },
             feedback: {
                 type: String,
-                required: true,
+                // required: true,
                 trim: true,
 
             }

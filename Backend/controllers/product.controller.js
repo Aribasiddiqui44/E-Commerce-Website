@@ -40,6 +40,7 @@ const getProductInfo = async (req, res) => {
     // check if that product exists.
     // then send the information of that product in response.
     // hiding some information, such as seller id, etc and other fields.
+    // const { _id}
     
 };
 
@@ -51,6 +52,14 @@ const postAddProduct = async (req, res) => {
     // create a user object with these fields, Product.create()
     // check the creation of the product document .
     // send the product object in the response.
+    const {
+        title, 
+        description,
+        brand,
+        price,
+        productImageUrl,
+        Quantity
+    } = req.body;
 };
 
 const patchChangeProductField = async (req, res) => {
