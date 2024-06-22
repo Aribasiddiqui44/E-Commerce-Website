@@ -40,7 +40,7 @@ const postProductSearch = asyncHandler( async (req, res) => {
     // take the objects and send them in response, 
 });
 
-const getProductInfo = async (req, res) => {
+const getProductInfo = asyncHandler( async (req, res) => {
     // take product id as input
     // search for that product in Product collection
     // check if that product exists.
@@ -48,7 +48,7 @@ const getProductInfo = async (req, res) => {
     // hiding some information, such as seller id, etc and other fields.
     // const { _id}
     
-};
+})
 
 const postAddProduct = asyncHandler( async (req, res) => {
     // take info -> req.body
@@ -136,7 +136,7 @@ const postAddProduct = asyncHandler( async (req, res) => {
     );
 });
 
-const patchChangeProductField = async (req, res) => {
+const patchAddFeatures = asyncHandler( async (req, res) => {
     // required field to be changed, and the value.
     // fields can be price, title, for this check the userId == sellerId of the product.
     // if not equals , then throw error, that only owner of the product can change the information.
@@ -145,9 +145,10 @@ const patchChangeProductField = async (req, res) => {
     // optional: check the updation -> not recommended.
     // send the updated document of that to the user without the private information.
 
-};
 
-const  patchChangeAvailabilityOfProduct = asyncHandler (async (req, res) => {
+});
+
+const  patchChangeAvailabilityOfProduct = asyncHandler ( async (req, res) => {
     // for deleting the product, take product id,
     // do not fully delete the product.
     // change the availability of product.
