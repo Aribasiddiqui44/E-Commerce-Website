@@ -47,7 +47,24 @@ const getProductInfo = asyncHandler( async (req, res) => {
     // then send the information of that product in response.
     // hiding some information, such as seller id, etc and other fields.
     // const { _id}
-    
+    const { productId } = req.body;
+    // let product = await Product.findById(productId);
+    // let user = await User.findById(product.productSeller);
+    const productWithCustomerInfo = await Product.aggregate([
+        {
+            $lookup: {
+                from: 'users',           // The collection to join
+                localField: 'productSeller',    // Field from the orders collection
+                foreignField: '_id',         // Field from the customers collection
+                as: 'sellerInfo'           // Output array field
+            }
+        },
+        {
+            $unwind: '$sellerInfo'        // Deconstructs the customerInfo array
+        }
+    ]);
+
+
 })
 
 const postAddProduct = asyncHandler( async (req, res) => {
