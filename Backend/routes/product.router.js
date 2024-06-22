@@ -32,7 +32,7 @@ router.route("/post").post(
     ]),
     postAddProduct
 )
-router.patch("/patch", patchChangeProductField);
-router.patch("/changeAvailability", patchChangeAvailabilityOfProduct); //only for authorized user mean admin or seller.
+router.patch("/patch", verifyJWT, patchChangeProductField);
+router.patch("/changeAvailability", verifyJWT, patchChangeAvailabilityOfProduct); //only for authorized user mean admin or seller.
 
 module.exports = router;

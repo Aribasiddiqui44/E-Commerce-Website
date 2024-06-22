@@ -147,13 +147,47 @@ const patchChangeProductField = async (req, res) => {
 
 };
 
-const  patchChangeAvailabilityOfProduct = async (req, res) => {
+const  patchChangeAvailabilityOfProduct = asyncHandler (async (req, res) => {
     // for deleting the product, take product id,
     // do not fully delete the product.
     // change the availability of product.
     // make it unavailable, for the future.
     // do not show the product.
-};
+    
+    const { productId, sellerProductId } = req.body;
+    // console.log(sellerProductId == req.user._id);
+    // console.log("seller ProductId: ", sellerProductId);
+    // console.log("user id : ", req.user._id.toString());
+
+    if ( req.user._id != sellerProductId ){
+        throw new ApiError(
+            401,
+            "Unauthorized request, Only Product Owner can change status."
+        )
+    };
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+        productId,
+        { isAvailable: false },
+        { new: true }
+    );
+
+    // verifying change.
+    if ( updatedProduct.isAvailable ){
+        throw new ApiError(
+            500,
+            "Internal Server Error! Something went wrong when updating the availability status."
+        );
+    };
+
+    res.status(200).json(
+        new ApiResponse(
+            200,
+            "Product availability status updated successfully"
+        )
+    );
+}
+);
 
 module.exports = {
     getProducts,
