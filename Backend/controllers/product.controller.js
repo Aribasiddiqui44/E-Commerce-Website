@@ -1,15 +1,32 @@
+const ApiResponse = require('../utils/ApiResponse.js');
 const Product = require('./../models/product.model.js');
 const User = require('./../models/user.model.js');
 
 const asyncHandler = require('./../utils/asyncHandler.js');
 
-const getProducts = async (req, res) => {
+const getProducts = asyncHandler( async (req, res) => {
     // get all products
     // no verificatin required -> like user donot have to login.
     // check that the product is available.
 
     // send all available products in response.
-};
+    // console.log(req.cookies.accessToken);
+    // console.log(req.cookies.refreshToken);
+    const Products = await Product.find({
+        isAvaiable: true
+    });
+    // Pagination can be done in future, so that specific quantity of data provided in one page.
+    res.status(200).json(
+        new ApiResponse(
+            200,
+            {
+                Products
+            },
+            "Products fetched successfully"
+        )
+    );
+}
+);
 
 const postProductSearch = asyncHandler( async (req, res) => {
     // take search keyword -> req.body
