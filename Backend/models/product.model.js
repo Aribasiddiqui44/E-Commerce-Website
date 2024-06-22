@@ -56,7 +56,7 @@ const productSchema = new Schema({
         ref: "User",
         required: true
     },
-    isAvaiable: {
+    isAvailable: {
         type: Boolean,
         default: true
     },
