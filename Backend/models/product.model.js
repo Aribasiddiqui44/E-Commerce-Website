@@ -46,7 +46,8 @@ const productSchema = new Schema({
         }
 
     ],
-    productQuantity: {
+    // productQuantity:
+    quantity: {
         type: Number,
         required: true,
     },

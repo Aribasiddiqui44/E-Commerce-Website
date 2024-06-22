@@ -1,8 +1,14 @@
-const ApiResponse = require('../utils/ApiResponse.js');
+
 const Product = require('./../models/product.model.js');
 const User = require('./../models/user.model.js');
 
 const asyncHandler = require('./../utils/asyncHandler.js');
+
+const ApiError = require('./../utils/ApiError.js');
+const ApiResponse = require('./../utils/ApiResponse.js');
+
+// cloudinary service
+const uploadOnCloudinary = require('./../services/cloudinary.service.js');
 
 const getProducts = asyncHandler( async (req, res) => {
     // get all products
@@ -44,7 +50,7 @@ const getProductInfo = async (req, res) => {
     
 };
 
-const postAddProduct = async (req, res) => {
+const postAddProduct = asyncHandler( async (req, res) => {
     // take info -> req.body
     // for picture use middleware multer for uploading picture to backend,
     // then use cloudinary service for uploading on cloud.
@@ -57,14 +63,78 @@ const postAddProduct = async (req, res) => {
         description,
         brand,
         price,
-        productImageUrl,
-        Quantity
+        quantity
     } = req.body;
 
-    res.send(req.user);
-    // const accessToken = req.cookies.accessToken;
-    // if ()
-};
+    if (
+        [title, description, brand, price, quantity].some((field) => field?.trim() === "")
+    ) {
+        throw new ApiError(
+            400,
+            "All fields are required"
+        );
+    };
+
+    const existedProduct = await Product.findOne(
+        {
+            title
+        }
+    );
+
+    if ( existedProduct ){
+        throw new ApiError(
+            409,
+            "Product with same title already listed."
+        );
+    };
+    // res.send(req.files);
+    // for uploading image to cloudinary.
+    const productImageLocalPath = req.files?.productImage[0]?.path;
+
+    if( !productImageLocalPath ){
+        throw new ApiError(
+            400,
+            "Product Image is required"
+        );
+    };
+
+    const productImage = await uploadOnCloudinary(productImageLocalPath);
+
+    if ( !productImage ){
+        throw new ApiError(
+            500,
+            "Internal Server Error! Something went wrong when upload file on cloud, kindly upload again"
+        );
+    };
+
+    const newProduct = await Product.create({
+        title,
+        description,
+        brand,
+        quantity,
+        price,
+        productImageUrl: productImage.url,
+        productSeller: req.user._id
+    });
+
+    let checkProduct = await Product.findById(newProduct._id).select(
+        "-productSeller"
+    );
+    if ( !checkProduct ){
+        throw new ApiError(
+            500,
+            "Internal Server Error! Something went wrong when creating product on database"
+        );
+    };
+
+    return res.status(201).json(
+        new ApiResponse(
+            201,
+            checkProduct,
+            "Product Listed Successfully"
+        )
+    );
+});
 
 const patchChangeProductField = async (req, res) => {
     // required field to be changed, and the value.

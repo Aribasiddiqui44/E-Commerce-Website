@@ -26,7 +26,7 @@ router.route("/post").post(
     verifyJWT,
     upload.fields([
         {
-            name: "Product Image",
+            name: "productImage",
             maxCount: 1
         }
     ]),
