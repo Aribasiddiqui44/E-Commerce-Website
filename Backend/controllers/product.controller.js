@@ -60,6 +60,8 @@ const postAddProduct = async (req, res) => {
         productImageUrl,
         Quantity
     } = req.body;
+
+    const 
 };
 
 const patchChangeProductField = async (req, res) => {
