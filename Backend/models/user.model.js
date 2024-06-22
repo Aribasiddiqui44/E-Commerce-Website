@@ -93,6 +93,10 @@ const userSchema = new Schema(
             type: Boolean, 
             default: false
         },
+        isAdmin: {
+            type: Boolean,
+            default: false
+        },
         // likedProducts: [
         //     {
         //         type: Schema.Types.ObjectId, // to reference an object
@@ -165,7 +169,9 @@ userSchema.methods.generateAccessToken = function () {
             _id: this._id,
             email: this.email,
             username: this.username,
-            fullName: this.fullName
+            fullName: this.fullName,
+            isAdmin: this.isAdmin,
+            isSeller: this.isSeller    
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
