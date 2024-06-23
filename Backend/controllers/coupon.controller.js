@@ -86,6 +86,31 @@ const postAddCoupon = asyncHandler( async (req, res) => {
 });
 
 const patchChangeCouponAvailability = async (req, res) => {
+    const { couponId } = req.body;
+    //checking if admin.
+    if ( !req.user.isAdmin ){
+        throw new ApiError(401, "Unauthorized request! Only admin can change status");
+    };
+
+    let coupon = await Coupon.findById(couponId);
+    const beforeChange = coupon.isActive;
+    coupon.isActive = !coupon.isActive;
+
+    await coupon.save(
+        { validateBeforeSave: false }
+    );
+
+    if ( beforeChange === coupon.isActive ) {
+        throw new ApiError(500, "Internal Server Error! Something went wrong when changing the active status of coupon");
+    };
+
+    res.status(200).json(
+        new ApiResponse(
+            200,
+            coupon,
+            "Status changed successfully."
+        )
+    );
 
 };
 const patchAvailCoupon = async (req, res) => {
