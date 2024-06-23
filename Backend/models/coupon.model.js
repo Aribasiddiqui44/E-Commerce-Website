@@ -12,7 +12,8 @@ const couponSchema = new Schema({
     discountType: {
         type: String,
         enum: ['percentage', 'fixed'],
-        required: true,
+        // required: true,
+        default: 'percentage'
     },
     discountValue: {
         type: Number,
@@ -28,7 +29,6 @@ const couponSchema = new Schema({
     },
     maxDiscountAmount: {
         type: Number,
-
     },
     isActive: {
         type: Boolean,

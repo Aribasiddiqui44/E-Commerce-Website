@@ -8,7 +8,7 @@ const getCouponInformation = async (req, res) => {
 
 };
 const postAddCoupon = async (req, res) => {
-
+    
 };
 const patchChangeCouponAvailability = async (req, res) => {
 
