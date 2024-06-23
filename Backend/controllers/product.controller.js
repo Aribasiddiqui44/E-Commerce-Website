@@ -223,7 +223,7 @@ const patchAddFeatures = asyncHandler( async (req, res) => {
     if ( !updatedProduct ){
         throw new ApiError(404, "Product not found.");
     };
-    
+
     console.log(updatedProduct);
 
     res.status(200).json(
@@ -254,16 +254,22 @@ const  patchChangeAvailabilityOfProduct = asyncHandler ( async (req, res) => {
         )
     };
 
-    const updatedProduct = await Product.findByIdAndUpdate(
-        productId,
-        {
-            $set: { isAvailable: false }
-        },
-        { new: true }
-    );
+    // const updatedProduct = await Product.findByIdAndUpdate(
+    //     productId,
+    //     {
+    //         $set: { isAvailable: !isAvailable }
+    //     },
+    //     { new: true }
+    // );
+    const updatedProduct = await Product.findByIdAndUpdate(productId);
+    let beforeUpdating = updatedProduct.isAvailable;
+    updatedProduct.isAvailable = !updatedProduct.isAvailable;
+    await updatedProduct.save({
+        validateBeforeSave: false
+    });
 
     // verifying change.
-    if ( updatedProduct.isAvailable ){
+    if ( updatedProduct.isAvailable === beforeUpdating ){
         throw new ApiError(
             500,
             "Internal Server Error! Something went wrong when updating the availability status."
