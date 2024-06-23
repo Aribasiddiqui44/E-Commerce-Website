@@ -226,7 +226,9 @@ const  patchChangeAvailabilityOfProduct = asyncHandler ( async (req, res) => {
 
     const updatedProduct = await Product.findByIdAndUpdate(
         productId,
-        { isAvailable: false },
+        {
+            $set: { isAvailable: false }
+        },
         { new: true }
     );
 
