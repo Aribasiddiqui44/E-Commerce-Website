@@ -4,7 +4,7 @@ const {
     postProductSearch,
     getProductInfo,
     postAddProduct,
-    patchChangeProductField,
+    patchAddFeatures,
     patchChangeAvailabilityOfProduct 
     } = require('./../controllers/product.controller.js');
 
@@ -20,7 +20,7 @@ router.route(
     postProductSearch
 );
 
-router.get("/getinfo", getProductInfo);
+router.get("/get/info", getProductInfo);
 // router.post("/post", postAddProduct);
 router.route("/post").post(
     verifyJWT,
@@ -32,7 +32,7 @@ router.route("/post").post(
     ]),
     postAddProduct
 )
-router.patch("/patch", verifyJWT, patchChangeProductField);
-router.patch("/changeAvailability", verifyJWT, patchChangeAvailabilityOfProduct); //only for authorized user mean admin or seller.
+router.patch("/patch/features", verifyJWT, patchAddFeatures);
+router.patch("/patch/availability", verifyJWT, patchChangeAvailabilityOfProduct); //only for authorized user mean admin or seller.
 
 module.exports = router;

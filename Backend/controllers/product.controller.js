@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 
 const Product = require('./../models/product.model.js');
 const User = require('./../models/user.model.js');
@@ -23,7 +24,7 @@ const getProducts = asyncHandler( async (req, res) => {
     const products = await Product.find({
         isAvailable: true
     }).sort({ createdAt: -1 });
-    
+
     // Pagination can be done in future, so that specific quantity of data provided in one page.
     //options for pagination
     const options = {
@@ -61,6 +62,11 @@ const getProductInfo = asyncHandler( async (req, res) => {
     // let user = await User.findById(product.productSeller);
     const productWithCustomerInfo = await Product.aggregate([
         {
+            $match: {
+                _id: new mongoose.Types.ObjectId(productId)
+            }
+        },
+        {
             $lookup: {
                 from: 'users',           // The collection to join
                 localField: 'productSeller',    // Field from the orders collection
@@ -70,9 +76,27 @@ const getProductInfo = asyncHandler( async (req, res) => {
         },
         {
             $unwind: '$sellerInfo'        // Deconstructs the customerInfo array
+        },
+        {
+            $project: {
+                'sellerInfo.password': 0,
+                'sellerInfo.refreshToken': 0
+            }
         }
     ]);
 
+    // console.log(productWithCustomerInfo);
+    if ( productWithCustomerInfo.length == 0 ){
+        throw new ApiError(401, "Invalid Product Id");
+    };
+    
+    res.status(200).json(
+        new ApiResponse(
+            200,
+            productWithCustomerInfo,
+
+        )
+    )
 
 })
 
@@ -221,7 +245,7 @@ module.exports = {
     postProductSearch,
     getProductInfo,
     postAddProduct,
-    patchChangeProductField,
+    patchAddFeatures,
     patchChangeAvailabilityOfProduct
 
 }
