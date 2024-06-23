@@ -202,7 +202,37 @@ const patchAddFeatures = asyncHandler( async (req, res) => {
     // optional: check the updation -> not recommended.
     // send the updated document of that to the user without the private information.
 
+    const { productId, productSellerId, features } = req.body;
+    if ( req.user._id != productSellerId ){
+        throw new ApiError(
+            401,
+            "Unauthorized request! Only product owner can modify any fields"
+        );
+    };
 
+    let updatedProduct = await Product.findByIdAndUpdate(
+        productId,
+        {
+            $set: {
+                features: features
+            }
+        },
+        { new: true }
+    );
+
+    if ( !updatedProduct ){
+        throw new ApiError(404, "Product not found.");
+    };
+    
+    console.log(updatedProduct);
+
+    res.status(200).json(
+        new ApiResponse(
+            200,
+            updatedProduct,
+            "Product Updated Successfully"
+        )
+    );
 });
 
 const  patchChangeAvailabilityOfProduct = asyncHandler ( async (req, res) => {
@@ -216,7 +246,7 @@ const  patchChangeAvailabilityOfProduct = asyncHandler ( async (req, res) => {
     // console.log(sellerProductId == req.user._id);
     // console.log("seller ProductId: ", sellerProductId);
     // console.log("user id : ", req.user._id.toString());
-
+    console.log( req.user._id == sellerProductId);
     if ( req.user._id != sellerProductId ){
         throw new ApiError(
             401,
