@@ -3,7 +3,7 @@ const { Router } = require('express');
 const {
     getCartContents,
     postCreateCart,
-    patchAddOrChangeProducts,
+    patchAddProduct,
     deleteCart
     } = require('./../controllers/cart.controller.js');
 
@@ -13,7 +13,7 @@ const router = Router();
 
 router.get("/get", verifyJWT, getCartContents);
 router.post("/post", verifyJWT, postCreateCart);
-router.patch("/patch", verifyJWT, patchAddOrChangeProducts);
+router.patch("/patch", verifyJWT, patchAddProduct);
 router.delete("/delete", verifyJWT, deleteCart);
 
 module.exports = router;

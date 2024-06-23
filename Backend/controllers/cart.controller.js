@@ -19,8 +19,8 @@ const getCartContents = asyncHandler( async (req, res) => {
 
 });
 
-const postCreateCart = async (req, res) => {
-    const { productId } = req.body;
+const postCreateCart = asyncHandler( async (req, res) => {
+    const { productId, quantity } = req.body;
 
     const existedCart = await Cart.findOne({ customerId: req.user._id });
     if ( existedCart ) {
@@ -37,8 +37,8 @@ const postCreateCart = async (req, res) => {
         productsList: [
             {
                 productId,
-                quantity: product.quantity,
-                totalCost: product.quantity * product.price,
+                quantity,
+                totalCost: quantity * product.price,
                 isAvailable: product.isAvailable
             }
         ]
@@ -60,10 +60,51 @@ const postCreateCart = async (req, res) => {
             "Cart created successfully"
         )
     );
-};
-const patchAddOrChangeProducts = async (req, res) => {
+});
+const patchAddProduct = async (req, res) => {
+    const { productId, quantity } = req.body;
+    let cart = await Cart.findOne(
+        {customerId: req.user._id}
+    );
+    // if ( cartId.customerId != req.user._id ) {
+    //     throw new ApiError(401, "Unauthorized Request")
+    // };
+    let product = await Product.findById(productId);
+    cart.productsList.push(
+        {
+            productId,
+            quantity,
+            totalCost: quantity * product.price,
+            isAvailable: product.isAvailable
+        }
+    );
+    await cart.save();
+
+    let checkChangeInCart = await Cart.findOne(
+        {
+            customerId: req.user._id,
+            'productsList.productId': productId
+        }
+    );
+
+    if ( !checkChangeInCart ) {
+        throw new ApiError(
+            500,
+            "Internal Server Error! Something went wrong when adding product to cart, try again."
+        );
+    };
+
+    res.status(200).json(
+        new ApiResponse(
+            200,
+            checkChangeInCart,
+            "Product added in cart successfully"
+        )
+    )
 
 };
+
+
 const deleteCart = async (req, res) => {
 
 };
@@ -71,6 +112,6 @@ const deleteCart = async (req, res) => {
 module.exports = {
     getCartContents,
     postCreateCart,
-    patchAddOrChangeProducts,
+    patchAddProduct,
     deleteCart
 }
