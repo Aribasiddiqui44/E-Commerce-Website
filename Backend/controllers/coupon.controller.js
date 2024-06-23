@@ -6,10 +6,21 @@ const User = require('./../models/user.model.js');
 
 const getCoupons = async (req, res) => {
     // get All coupons
+    let coupons = await Coupon.find(
+        {isActive: true}
+    );
+
+    res.status(200).json(
+        new ApiResponse(
+            200,
+            coupons
+        )
+    )
 };
 const getCouponInformation = async (req, res) => {
 
 };
+
 const postAddCoupon = asyncHandler( async (req, res) => {
     const { code, discountType, discountValue, minOrderValue, maxDiscountAmount } = req.body;
 
@@ -73,6 +84,7 @@ const postAddCoupon = asyncHandler( async (req, res) => {
         )
     );
 });
+
 const patchChangeCouponAvailability = async (req, res) => {
 
 };
