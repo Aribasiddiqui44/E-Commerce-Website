@@ -7,13 +7,13 @@ const {
     deleteCart
     } = require('./../controllers/cart.controller.js');
 
-
+const verifyJWT = require('./../middlewares/auth.middleware.js');
  
 const router = Router();
 
-router.get("/get", getCartContents);
-router.post("/post", postCreateCart);
-router.patch("/patch", patchAddOrChangeProducts);
-router.delete("/delete", deleteCart);
+router.get("/get", verifyJWT, getCartContents);
+router.post("/post", verifyJWT, postCreateCart);
+router.patch("/patch", verifyJWT, patchAddOrChangeProducts);
+router.delete("/delete", verifyJWT, deleteCart);
 
 module.exports = router;

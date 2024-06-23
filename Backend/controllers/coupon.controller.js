@@ -6,6 +6,8 @@ const User = require('./../models/user.model.js');
 
 const getCoupons = async (req, res) => {
     // get All coupons
+    // const user = await User.findById
+    // I have to check it -> to check for availed coupons by users.
     let coupons = await Coupon.find(
         {isActive: true}
     );
@@ -17,6 +19,7 @@ const getCoupons = async (req, res) => {
         )
     )
 };
+
 const getCouponInformation = async (req, res) => {
 
 };
@@ -115,7 +118,7 @@ const patchChangeCouponAvailability = asyncHandler( async (req, res) => {
 });
 
 const patchAvailCoupon = async (req, res) => {
-
+ // will be implemented in future with order controller for discount checking.
 };
 
 module.exports = {
