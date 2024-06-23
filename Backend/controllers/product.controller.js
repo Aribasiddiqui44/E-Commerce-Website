@@ -93,8 +93,7 @@ const getProductInfo = asyncHandler( async (req, res) => {
     res.status(200).json(
         new ApiResponse(
             200,
-            productWithCustomerInfo,
-
+            productWithCustomerInfo
         )
     )
 
@@ -166,6 +165,14 @@ const postAddProduct = asyncHandler( async (req, res) => {
         productImageUrl: productImage.url,
         productSeller: req.user._id
     });
+
+    await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: { isSeller: true }
+        },
+        { new: true }
+    );
 
     let checkProduct = await Product.findById(newProduct._id).select(
         "-productSeller"
