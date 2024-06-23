@@ -7,12 +7,13 @@ const {
     patchAvailCoupon
     } = require('./../controllers/coupon.controller.js');
 
+const verifyJWT = require('./../middlewares/auth.middleware.js');
 const router = Router();
 
 router.get("/getAll", getCoupons);
 router.get("/getInfo", getCouponInformation);
-router.post("/post", postAddCoupon);
-router.patch("/patchClose", patchChangeCouponAvailability);
-router.patch("/patchAvail", patchAvailCoupon);
+router.post("/post", verifyJWT, postAddCoupon);
+router.patch("/patchClose", verifyJWT, patchChangeCouponAvailability);
+router.patch("/patchAvail", verifyJWT, patchAvailCoupon);
 
 module.exports = router;
