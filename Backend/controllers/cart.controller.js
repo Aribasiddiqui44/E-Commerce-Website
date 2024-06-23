@@ -61,7 +61,7 @@ const postCreateCart = asyncHandler( async (req, res) => {
         )
     );
 });
-const patchAddProduct = async (req, res) => {
+const patchAddProduct = asyncHandler( async (req, res) => {
     const { productId, quantity } = req.body;
     let cart = await Cart.findOne(
         {customerId: req.user._id}
@@ -102,9 +102,37 @@ const patchAddProduct = async (req, res) => {
         )
     )
 
-};
+});
+
+const patchRemoveProductFromCart = asyncHandler( async (req, res) => {
+    const { productId } = req.body;
+    
+    // let cart = await Cart.findOne(
+    //     {
+    //         customerId: req.user._id,
+    //         'productsList.productId': productId
+    //     }
+    // );
+
+    let cart = await Cart.findOneAndUpdate(
+        { customerId: req.user._id },
+        {
+            $pull: {
+                productsList: { productId }
+            }
+        },
+        { new: true }
+    ); // A/C to chat this method will not call the pre save method of the model, it will be called only when we .save(), or .create(), etc.
+    // SO here if we go with this approach then we have to calculate totalCost seperately.
+    // else we can go for .save() and remove the product manually.
+     
+
+    if ( !cart ) { 
+        throw new ApiError(400, "Bad Request! The product is already removed from cart");
+    };
 
 
+})
 const deleteCart = async (req, res) => {
 
 };
@@ -113,5 +141,6 @@ module.exports = {
     getCartContents,
     postCreateCart,
     patchAddProduct,
+    patchRemoveProductFromCart,
     deleteCart
 }
