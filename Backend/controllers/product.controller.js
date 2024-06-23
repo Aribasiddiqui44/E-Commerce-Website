@@ -48,6 +48,27 @@ const postProductSearch = asyncHandler( async (req, res) => {
     // take search keyword -> req.body
     // search for those keywords, do a full search , like done in Safwaat, check Safwaat repo for reference.
     // take the objects and send them in response, 
+    const { keyword } = req.body;
+    const searchedProducts = await Product.find({
+        $or: [
+            { title: { $regex: keyword, $options: 'i' } },
+            { description: { $regex: keyword, $options: 'i' } },
+            { brand: { $regex: keyword, $options: 'i' } },
+        ],
+        isAvailable: true
+    });
+    // }).sort(
+    //     {title: 1},
+    //     {brand: 1},
+    //     {description: 1}
+    // );
+    res.status(200).json(
+        new ApiResponse(
+            200,
+            searchedProducts,
+            (searchedProducts.length == 0) ? "No matching products" : "Success"
+        )
+    )
 });
 
 const getProductInfo = asyncHandler( async (req, res) => {

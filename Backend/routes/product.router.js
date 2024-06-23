@@ -16,7 +16,7 @@ router.get("/getall", getProducts);
 
 router.route(
     "/search"
-).post( 
+).get( 
     postProductSearch
 );
 
