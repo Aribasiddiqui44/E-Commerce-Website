@@ -28,16 +28,42 @@ const postAddCoupon = asyncHandler( async (req, res) => {
         throw new ApiError(400, "Bad Request! A coupon with this code already existed, use some other coupon code.");
     };
 
-    const newCoupon = await Coupon.create({
-        code,
-        discountType,
-        discountValue
-    });
+    let newCoupon;
+    if ( !minOrderValue && !maxDiscountAmount){
+        newCoupon = await Coupon.create({
+            code,
+            discountType,
+            discountValue
+        });
+    } else if ( !maxDiscountAmount ){
+        newCoupon = await Coupon.create({
+            code,
+            discountType,
+            discountValue,
+            minOrderValue
+        });
+    } else if ( !minOrderValue ){
+        newCoupon = await Coupon.create({
+            code,
+            discountType,
+            discountValue,
+            maxDiscountAmount
+        });    
+    } else {
+        newCoupon = await Coupon.create({
+            code,
+            discountType,
+            discountValue,
+            maxDiscountAmount,
+            minOrderValue
+        });
+    }
 
     const verifyCoupon = await Coupon.findById(newCoupon._id);
     if ( !verifyCoupon ){
-        throw new ApiError(500, "Internal Server Error! Something went wrong when adding the COupon to Cloud")
-    }
+        throw new ApiError(500, "Internal Server Error! Something went wrong when adding the COupon to Cloud");
+    };
+
 
     res.status(201).json(
         new ApiResponse(
@@ -45,7 +71,7 @@ const postAddCoupon = asyncHandler( async (req, res) => {
             verifyCoupon,
             "Coupon created successfully"
         )
-    )
+    );
 });
 const patchChangeCouponAvailability = async (req, res) => {
 
