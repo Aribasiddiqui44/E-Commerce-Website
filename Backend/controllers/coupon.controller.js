@@ -85,7 +85,7 @@ const postAddCoupon = asyncHandler( async (req, res) => {
     );
 });
 
-const patchChangeCouponAvailability = async (req, res) => {
+const patchChangeCouponAvailability = asyncHandler( async (req, res) => {
     const { couponId } = req.body;
     //checking if admin.
     if ( !req.user.isAdmin ){
@@ -94,7 +94,7 @@ const patchChangeCouponAvailability = async (req, res) => {
 
     let coupon = await Coupon.findById(couponId);
     const beforeChange = coupon.isActive;
-    coupon.isActive = !coupon.isActive;
+    coupon.isActive = !coupon.isActive; 
 
     await coupon.save(
         { validateBeforeSave: false }
@@ -112,7 +112,8 @@ const patchChangeCouponAvailability = async (req, res) => {
         )
     );
 
-};
+});
+
 const patchAvailCoupon = async (req, res) => {
 
 };
