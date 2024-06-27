@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Web3 from "web3";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -14,6 +15,7 @@ const Cart = () => {
   const [shippingCharge, setShippingCharge] = useState("");
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
+  const [isCart, setIsCart] = useState(false);
 
   useEffect(() => {
     let price = 0;
@@ -25,13 +27,13 @@ const Cart = () => {
   }, [products]);
   useEffect(() => {
     if (totalAmt <= 200) {
-      setShippingCharge(30);
+      setShippingCharge(1);
     } 
     // else if (totalAmt <= 400) {
     //   setShippingCharge(25);
     // } 
     else if (totalAmt > 201) {
-      setShippingCharge(20);
+      setShippingCharge(10);
     }
   }, [totalAmt]);
 
@@ -44,7 +46,64 @@ const Cart = () => {
       alert("Invalid coupon code");
     }
   };
-
+  const handlePayment = async () => {
+    if (typeof window.ethereum !== "undefined") {
+      const web3 = new Web3(window.ethereum);
+      try {
+        console.log("Requesting MetaMask accounts...");
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+        const accounts = await web3.eth.getAccounts();
+        if (accounts.length === 0) {
+          alert("Please connect to MetaMask.");
+          return;
+        }
+        const account = accounts[0];
+        console.log("MetaMask account:", account);
+  
+        const totalAmountInEth = web3.utils.toWei(
+          ((totalAmt + shippingCharge - discount) / 1000).toString(),
+          "ether"
+        );
+        console.log("Total amount in ETH:", totalAmountInEth);
+  
+        const balance = await web3.eth.getBalance(account);
+        console.log("Account balance in Wei:", balance);
+        const balanceInEth = web3.utils.fromWei(balance, "ether");
+        console.log("Account balance in ETH:", balanceInEth);
+  
+        // Check if the account has enough balance
+        if (parseFloat(balanceInEth) < parseFloat(web3.utils.fromWei(totalAmountInEth, "ether"))) {
+          alert("Insufficient funds for transaction!");
+          return;
+        }
+  
+        const transactionParameters = {
+          from: account,
+          to: "0x46F13F95a4E8831C5000cacd32322c0ceEC8F7a1", // Replace with your wallet address
+          value: totalAmountInEth,
+          gas: 21000, // You may need to adjust this value
+        };
+  
+        console.log("Sending transaction with parameters:", transactionParameters);
+  
+        await web3.eth.sendTransaction(transactionParameters);
+  
+        alert("Payment successful!");
+        setIsCart(true);
+        if(isCart === true){
+          dispatch(resetCart());
+        }
+        
+        
+      } catch (error) {
+        console.error("Payment failed:", error);
+        alert("Payment failed! See console for details.");
+      }
+    } else {
+      alert("MetaMask is not installed!");
+    }
+  };
+  
 
   return (
     <div className="max-w-container mx-auto px-4">
@@ -108,12 +167,19 @@ const Cart = () => {
                   </span>
                 </p>
               </div>
-              <div className="flex justify-end">
+              {/* <div className="flex justify-end">
                 <Link to="/paymentgateway">
-                  <button className="w-52 h-10 bg-primeColor text-white hover:bg-black duration-300">
-                    Proceed to Checkout
+                  <button onClick={handlePayment}
+                  className="w-52 h-10 bg-primeColor text-white hover:bg-black duration-300 ">
+                    Pay With MetaMask
                   </button>
                 </Link>
+              </div> */}
+              <div className="flex justify-end">
+                  <button onClick={handlePayment}
+                  className="w-52 h-10 bg-primeColor text-white hover:bg-black duration-300 ">
+                    Pay Now
+                  </button>
               </div>
             </div>
           </div>
@@ -153,5 +219,15 @@ const Cart = () => {
 };
 
 export default Cart;
+
+
+
+
+
+
+
+
+
+
 
 
