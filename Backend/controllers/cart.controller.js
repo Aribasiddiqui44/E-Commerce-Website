@@ -7,13 +7,42 @@ const ApiResponse = require('./../utils/ApiResponse.js');
 const ApiError = require('../utils/ApiError.js');
 
 const getCartContents = asyncHandler( async (req, res) => {
-    const cart = await Cart.findOne({ customerId: req.user._id });
+    // const cart = await Cart.findOne({ customerId: req.user._id });
 
-    res.status(200).json(
+    const cart = await Product.aggregate([
+        {
+            $match: {
+                customerId: req.user._id
+            }
+        },
+        {
+            '$unwind': '$productsList'
+        },
+        {
+            $lookup: {
+                from: 'products',           // The collection to join
+                localField: 'productsList.productId',    // Field from the orders collection
+                foreignField: '_id',         // Field from the customers collection
+                as: 'productInfo'           // Output array field
+            }
+        },
+        {
+            "$group": {
+                "_id": "$_id",
+                "productsList": {
+                    "$push": {
+                        "product": "$products",
+                        "productInfo": "$productInfo"
+                    }
+                }
+            }
+        },
+    ]);
+    res.status(200).json(  
         new ApiResponse(
             200,
             cart,
-            (cart.length === 0) ? "No products in cart" : "Success"
+            (cart.productsList.length === 0) ? "No products in cart" : "Success"
         )
     );
 

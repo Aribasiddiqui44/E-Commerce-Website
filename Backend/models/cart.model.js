@@ -31,7 +31,6 @@ const cartSchema = new Schema({
             },
             dateAdded: {
                 type: Date,
-                required: true,
                 default: Date.now
             }
         }
