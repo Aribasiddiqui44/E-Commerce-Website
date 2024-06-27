@@ -3,7 +3,7 @@ const User = require('./../models/user.model.js');
 const Product = require('./../models/product.model.js');
 
 const getWishlistOfUser = async (req, res) => {
-
+    
 };
 const postAddWishlistOfUser = async(req, res) => {
 
