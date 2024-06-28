@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BsCheckCircleFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { logoLight } from "../../assets/images";
+import axios from 'axios';
 
 const SignUp = () => {
   // ============= Initial State Start here =============
@@ -68,7 +69,7 @@ const SignUp = () => {
   };
   // ================= Email Validation End here ===============
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     if (checked) {
       if (!clientName) {
@@ -81,9 +82,9 @@ const SignUp = () => {
           setErrEmail("Enter a Valid email");
         }
       }
-      if (!phone) {
-        setErrPhone("Enter your phone number");
-      }
+      // if (!phone) {
+      //   setErrPhone("Enter your phone number");
+      // }
       if (!password) {
         setErrPassword("Create a password");
       } else {
@@ -91,41 +92,58 @@ const SignUp = () => {
           setErrPassword("Passwords must be at least 6 characters");
         }
       }
-      if (!address) {
-        setErrAddress("Enter your address");
-      }
-      if (!city) {
-        setErrCity("Enter your city name");
-      }
-      if (!country) {
-        setErrCountry("Enter the country you are residing");
-      }
-      if (!zip) {
-        setErrZip("Enter the zip code of your area");
-      }
+      // if (!city) {
+        //   setErrCity("Enter your city name");
+        // }
+        // if (!country) {
+          //   setErrCountry("Enter the country you are residing");
+          // }
+
+          //optional
+      //     if (!address) {
+      //       setErrAddress("Enter your address");
+      //     }
+      //     if (!zip) {
+      //   setErrZip("Enter the zip code of your area");
+      // }
       // ============== Getting the value ==============
       if (
         clientName &&
         email &&
         EmailValidation(email) &&
         password &&
-        password.length >= 6 &&
-        address &&
-        city &&
-        country &&
-        zip
+        password.length >= 6 
+        // address && 
+        // city &&
+        // country &&
+        // zip
       ) {
-        setSuccessMsg(
-          `Hello dear ${clientName}, Welcome you to OREBI Admin panel. We received your Sign up request. We are processing to validate your access. Till then stay connected and additional assistance will be sent to you by your mail at ${email}`
-        );
-        setClientName("");
-        setEmail("");
-        setPhone("");
-        setPassword("");
-        setAddress("");
-        setCity("");
-        setCountry("");
-        setZip("");
+
+        try {
+          let response = await axios.post('http://localhost:8000/user/post', {
+            fullName: clientName,
+            email,
+            password,
+            username: email.split('@')[0] // make a username field, untill then we take email as username.
+          })
+          
+          setSuccessMsg(
+            // `Hello dezar ${clientName}, Welcome you to OREBI Admin panel. We received your Sign up request. We are processing to validate your access. Till then stay connected and additional assistance will be sent to you by your mail at ${email}`
+            response.data
+          );
+          setClientName("");
+          setEmail("");
+          // setPhone("");
+          setPassword("");
+          // setAddress("");
+          // setCity("");
+          // setCountry("");
+          // setZip("");
+
+        } catch(err) {
+          console.log(err);
+        }
+
       }
     }
   };
@@ -203,7 +221,7 @@ const SignUp = () => {
             <p className="w-full px-4 py-10 text-green-500 font-medium font-titleFont">
               {successMsg}
             </p>
-            <Link to="/signin">
+            <Link to="/signin"> 
               <button
                 className="w-full h-10 bg-primeColor rounded-md text-gray-200 text-base font-titleFont font-semibold 
             tracking-wide hover:bg-black hover:text-white duration-300"

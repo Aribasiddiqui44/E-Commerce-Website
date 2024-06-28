@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const mongooseAggregatePaginate = require('mongoose-aggregate-paginate-v2');
 const productSchema = new Schema({
+    //title
+    //description
+    // brand - optional
     title: {
         type: String,
         required: true,
@@ -20,8 +23,7 @@ const productSchema = new Schema({
     },
     brand: {
         type: String,
-        required: false,
-        unique: true,
+        // required: false, 
         lowercase: true,
         trim: true,
         default: "No"

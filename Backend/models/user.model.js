@@ -5,6 +5,11 @@ const JWT = require('jsonwebtoken');
 const { Schema } = mongoose;
 const userSchema = new Schema(
     {
+        //username
+        //email
+        // fullName
+        // avatar -> not required for sign up now.
+        // password
         username: {
             type: String,
             required: true,
@@ -42,7 +47,7 @@ const userSchema = new Schema(
         },
         avatar: {
             type: String, // cloudinary URL
-            required: true,
+            // required: true,
         },
         address: { // billing address
             houseNumber: {

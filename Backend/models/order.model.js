@@ -45,24 +45,25 @@ const orderSchema = new Schema({
             priceBeforeDiscount: {
                 type: Schema.Types.Decimal128
             },
-            discount: { // in %
-                type: Schema.Types.Decimal128,
-                default: 0.0
-            },
             preTaxPrice: { // after discount
                 type: Schema.Types.Decimal128
-
+                
             },
             afterTaxPrice: {
                 type: Schema.Types.Decimal128
-
+                
             },
             // totalCost: {
-            //     type: Schema.Types.Decimal128,
-            //     required: true
-            // }
-        }
-    ],
+                //     type: Schema.Types.Decimal128,
+                //     required: true
+                // }
+            }
+        ],
+        discount: { // in %
+            type: Schema.Types.Decimal128,
+            default: 0.0
+        },
+
     shippingAddress: {
         // Order is delivered at this address , it will always be static , will never change, even if shipping address in user's profiel changed.
         //  the shipping address in user's profiel if for providing ease of use, if user wants to use that, he can directly use that address.
@@ -122,6 +123,7 @@ const orderSchema = new Schema({
 const Tax_rate = 17;
 orderSchema.pre("save", async function(next){
     try{
+        // this should be changed as we have chnaged the model.
         for(product of this.Products){
             let rate = parseFloat(product.rate.toString());
             let discount = parseFloat(product.discount ? product.discount.toString() : '0');
