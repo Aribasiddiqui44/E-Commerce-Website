@@ -196,5 +196,6 @@ module.exports = {
     getWishlistOfUser,
     postAddWishlistOfUser,
     patchWishlist,
+    patchRemoveProduct,
     deleteWishlistProduct
 };

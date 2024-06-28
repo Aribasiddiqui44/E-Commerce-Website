@@ -3,6 +3,7 @@ const {
     getWishlistOfUser,
     postAddWishlistOfUser,
     patchWishlist,
+    patchRemoveProduct,
     deleteWishlistProduct
     } = require('./../controllers/wishlist.controller.js');
 
@@ -16,6 +17,10 @@ router.patch(
     verifyJWT,
     patchWishlist
 );
+router.route("/patch/remove").patch(
+    verifyJWT,
+    patchRemoveProduct
+)
 router.delete("/delete", verifyJWT, deleteWishlistProduct);
 
 module.exports = router;
