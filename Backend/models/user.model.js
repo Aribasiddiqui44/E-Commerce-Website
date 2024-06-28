@@ -98,8 +98,14 @@ const userSchema = new Schema(
         // ],
         purchasedProducts: [
             {
-                type: Schema.Types.ObjectId,
-                ref: "Product"
+                productPurchased: {
+                    type: Schema.Types.ObjectId,
+                    ref: "Product"
+                },
+                feedbackGiven: {
+                    type: Boolean,
+                    default: false
+                }
             }
         ],
         password: {
