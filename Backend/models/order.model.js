@@ -15,7 +15,7 @@ const orderSchema = new Schema({
         required: true,
         unique: true,
     },
-    orderStatus: { // Processing, Packing, Shipped, Delivery, Delivered  or Cancelled.
+    orderStatus: { // Processing, Dispatched, Shipped, On the way, Delivered  or Cancelled.
         type: String,
         default: "Processing"
     },
@@ -47,7 +47,7 @@ const orderSchema = new Schema({
             },
             discount: { // in %
                 type: Schema.Types.Decimal128,
-                default: null
+                default: 0.0
             },
             preTaxPrice: { // after discount
                 type: Schema.Types.Decimal128
@@ -66,23 +66,36 @@ const orderSchema = new Schema({
     shippingAddress: {
         // Order is delivered at this address , it will always be static , will never change, even if shipping address in user's profiel changed.
         //  the shipping address in user's profiel if for providing ease of use, if user wants to use that, he can directly use that address.
-        houseNumber: {
-            type: String,
-            required: true,
+        // houseNumber: {
+        //     type: String,
+        //     required: true,
             
-        }, city: {
+        // }, city: {
+        //     type: String,
+        //     required: true,
+        // }, postalCode: {
+        //     type: Number,
+        //     required: true
+        // }, country: {
+        //     type: String,
+        //     required: true
+        // }, otherInformation: {
+        //     type: String,
+        //     trim: true,          
+        // }
+        address: {
             type: String,
-            required: true,
-        }, postalCode: {
+            requried: true,
+            trim: true
+        },
+        postalCode: {
             type: Number,
             required: true
-        }, country: {
+        },
+        otherInformation: {
+            // such as near ____ building, etc.
             type: String,
-            required: true
-        }, otherInformation: {
-            type: String,
-            trim: true,
-            
+            trim: true
         }
     },
     orderPlacedAt: {
