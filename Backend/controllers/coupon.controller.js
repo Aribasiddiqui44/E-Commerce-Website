@@ -11,7 +11,20 @@ const getCoupons = async (req, res) => {
     let coupons = await Coupon.find(
         {isActive: true}
     );
+    if( coupons.length === 0 ){
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                [],
+                "No active coupons"
+            )
+        )
+    }
+    // maybe in future we merge botht these  queries.
+    let user = await User.findById(req.user._id);
+    // for(let coupon of coupons){
 
+    // }
     res.status(200).json(
         new ApiResponse(
             200,
