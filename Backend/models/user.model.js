@@ -68,24 +68,17 @@ const userSchema = new Schema(
             type: Number
         },
         shippingAddress: [
-            {
-                houseNumber: {
-                    type: String,
-                    // required: true,
-                    
-                }, city: {
-                    type: String,
-                    // required: true,
-                }, postalCode: {
-                    type: Number,
-                    // required: true
-                }, country: {
-                    type: String,
-                    // required: true
-                }, otherInformation: {
+            {   
+                address: {
                     type: String,
                     trim: true,
-                    
+                },
+                postalCode: {
+                    type: Number,
+                },
+                otherInformation: {
+                    type: String,
+                    trim: true
                 }
             }
         ],

@@ -12,14 +12,14 @@ const orderSchema = new Schema({
     paymentId: {
         type: Schema.Types.ObjectId,
         ref: "Payment",
-        required: true,
+        // required: true,
         unique: true,
     },
     orderStatus: { // Processing, Dispatched, Shipped, On the way, Delivered  or Cancelled.
         type: String,
         default: "Processing"
     },
-    Products: [
+    products: [
         {
             productId: {
                 type: Schema.Types.ObjectId,
