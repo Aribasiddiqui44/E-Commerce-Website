@@ -166,6 +166,22 @@ const postPlaceOrder = asyncHandler( async (req, res) => {
     
     await user.save();
 
+    await order.save();
+
+    let checkOrder = await Order.findById(order._id);
+    if ( !checkOrder ) {
+        throw new ApiError(
+            500,
+            "Internal Server Error! Something went wrong when placing order. Please Try again."
+        );
+    };
+
+    res.status(201).json(
+        201,
+        order,
+        "Order placed successfully"
+    )
+
 });
 
 
