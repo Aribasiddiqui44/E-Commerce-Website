@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { BsCheckCircleFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logoLight } from "../../assets/images";
+import { toast } from "react-toastify";
 import axios from 'axios';
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
   // ============= Initial State Start here =============
   const [clientName, setClientName] = useState("");
   const [email, setEmail] = useState("");
@@ -29,6 +32,7 @@ const SignUp = () => {
   const [successMsg, setSuccessMsg] = useState("");
   // ============= Event Handler Start here =============
   const handleName = (e) => {
+
     setClientName(e.target.value);
     setErrClientName("");
   };
@@ -126,19 +130,21 @@ const SignUp = () => {
             password,
             username: email.split('@')[0] // make a username field, untill then we take email as username.
           })
-          
-          setSuccessMsg(
-            // `Hello dezar ${clientName}, Welcome you to OREBI Admin panel. We received your Sign up request. We are processing to validate your access. Till then stay connected and additional assistance will be sent to you by your mail at ${email}`
-            response.data
-          );
+          console.log(response);
+          // setSuccessMsg(
+            //   // `Hello dezar ${clientName}, Welcome you to OREBI Admin panel. We received your Sign up request. We are processing to validate your access. Till then stay connected and additional assistance will be sent to you by your mail at ${email}`
+            //   "User registered successfully"
+            // );
           setClientName("");
           setEmail("");
-          // setPhone("");
+            // setPhone("");
           setPassword("");
-          // setAddress("");
-          // setCity("");
-          // setCountry("");
-          // setZip("");
+            // setAddress("");
+            // setCity("");
+            // setCountry("");
+            // setZip("");
+            navigate('/signin');
+            toast.success("User registered successfully, signin to continue");
 
         } catch(err) {
           console.log(err);
