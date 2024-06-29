@@ -49,26 +49,26 @@ const userSchema = new Schema(
             type: String, // cloudinary URL
             // required: true,
         },
-        address: { // billing address
-            houseNumber: {
-                type: String,
-                // required: true,
+        // address: { // billing address
+        //     houseNumber: {
+        //         type: String,
+        //         // required: true,
                 
-            }, city: {
-                type: String,
-                // required: true,
-            }, postalCode: {
-                type: Number,
-                // required: true
-            }, country: {
-                type: String,
-                // required: true
-            }, otherInformation: {
-                type: String,
-                trim: true,
+        //     }, city: {
+        //         type: String,
+        //         // required: true,
+        //     }, postalCode: {
+        //         type: Number,
+        //         // required: true
+        //     }, country: {
+        //         type: String,
+        //         // required: true
+        //     }, otherInformation: {
+        //         type: String,
+        //         trim: true,
                 
-            }
-        },
+        //     }
+        // },
         phoneNumber: {
             type: Number
         },
