@@ -42,9 +42,9 @@ const orderSchema = new Schema({
                 default: 1,
                 
             },
-            priceBeforeDiscount: {
-                type: Schema.Types.Decimal128
-            },
+            // priceBeforeDiscount: {
+            //     type: Schema.Types.Decimal128
+            // },
             preTaxPrice: { // after discount
                 type: Schema.Types.Decimal128
                 
@@ -103,7 +103,14 @@ const orderSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    totalAmount: {
+    totalAmountBeforeTaxWithoutDiscount: {
+        type: Schema.Types.Decimal128,
+
+    },
+    totalAmountAfterTax: {
+        type: Schema.Types.Decimal128
+    },
+    totalAmountAfterDiscountAfterTax: {
         type: Schema.Types.Decimal128
     },
     paymentStatus: {
@@ -123,22 +130,31 @@ const orderSchema = new Schema({
 const Tax_rate = 17;
 orderSchema.pre("save", async function(next){
     try{
+        this.totalAmountBeforeTaxWithoutDiscount = 0.0;
+        this.total
         // this should be changed as we have chnaged the model.
         for(product of this.Products){
             let rate = parseFloat(product.rate.toString());
-            let discount = parseFloat(product.discount ? product.discount.toString() : '0');
-            product.priceBeforeDiscount = rate*product.quantity;
-            let discountAmount = (discount/100)*product.priceBeforeDiscount;
-    
-            product.preTaxPrice = product.priceBeforeDiscount - discountAmount;
-    
+            // let discount = parseFloat(product.discount ? product.discount.toString() : '0');
+            // product.priceBeforeDiscount = rate*product.quantity;
+            
+            product.preTaxPrice = rate*product.quantity;
+            
             product.afterTaxPrice = product.preTaxPrice * (1 + Tax_rate);
+            this.totalAmountBeforeTaxWithoutDiscount += product.preTaxPrice;
         }
-        const totalAmount = this.Products.reduce((sum, product) => {
-            return sum + parseFloat(product.afterTaxPrice.toString());
-        }, 0);
+        this.totalAmountAfterTax = this.totalAmountBeforeTaxWithoutDiscount*(1+Tax_rate);
 
-        this.totalAmount = totalAmount;
+        let discountAmount = (this.discount/100)*product.this.totalAmountAfterTax;
+        // this.discount = discountAmount;
+        this.totalAmountAfterDiscountAfterTax = this.totalAmountAfterTax - discountAmount;
+
+
+        // const totalAmount = this.Products.reduce((sum, product) => {
+        //     return sum + parseFloat(product.afterTaxPrice.toString());
+        // }, 0);
+
+        // this.totalAmount = totalAmount;
 
         next();
     }catch(error){
