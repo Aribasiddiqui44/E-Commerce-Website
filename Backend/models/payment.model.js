@@ -19,7 +19,7 @@ const paymentSchema = new Schema({
         type: Schema.Types.Decimal128,
         required: true,
     },
-    paymentType: { // Card, Stripe, Blockchain wallet etc
+    paymentMethod: { // Card, Stripe, Blockchain wallet etc
         type: String,
         required: true,
         trim: true,
