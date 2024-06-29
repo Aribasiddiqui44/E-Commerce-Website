@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import { BsCheckCircleFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logoLight } from "../../assets/images";
+import { toast } from "react-toastify";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const SignIn = () => {
+  const navigate = useNavigate();
+
   // ============= Initial State Start here =============
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,7 +29,7 @@ const SignIn = () => {
     setErrPassword("");
   };
   // ============= Event Handler End here ===============
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
 
     if (!email) {
@@ -36,11 +41,29 @@ const SignIn = () => {
     }
     // ============== Getting the value ==============
     if (email && password) {
-      setSuccessMsg(
-        `Hello dear, Thank you for your attempt. We are processing to validate your access. Till then stay connected and additional assistance will be sent to you by your mail at ${email}`
-      );
-      setEmail("");
-      setPassword("");
+      // setSuccessMsg(
+      //   `Hello dear, Thank you for your attempt. We are processing to validate your access. Till then stay connected and additional assistance will be sent to you by your mail at ${email}`
+      // );
+      try{
+
+        let response = await axios.post('http://localhost:8000/user/login',{
+          usernameOremail: email,
+          password: password
+        });
+        // console.log(response);
+        Cookies.set('accessToken', response.data.data.accessToken);
+        Cookies.set('refreshToken', response.data.data.refreshToken);
+        // console.log("Refresh COOKIES: ", Cookies.get('accessToken'));
+        // console.log("Access COOKIES: ", Cookies.get('refreshToken'));
+        setEmail("");
+        setPassword("");
+        navigate('/');
+        toast.success("Logged in Successful");
+
+      } catch(err) {
+        console.log(err);
+        toast.error("Please try again.")
+      }
     }
   };
   return (
@@ -138,7 +161,7 @@ const SignIn = () => {
                 {/* Email */}
                 <div className="flex flex-col gap-.5">
                   <p className="font-titleFont text-base font-semibold text-gray-600">
-                    Work Email
+                    Email or Username
                   </p>
                   <input
                     onChange={handleEmail}

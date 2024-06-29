@@ -5,6 +5,9 @@ import { logoLight } from "../../assets/images";
 import { toast } from "react-toastify";
 import axios from 'axios';
 
+// add username field
+// and profileImage field on signup
+// 
 const SignUp = () => {
   const navigate = useNavigate();
 
@@ -148,6 +151,7 @@ const SignUp = () => {
 
         } catch(err) {
           console.log(err);
+          toast.error("Failed to register user, please try again.");
         }
 
       }
