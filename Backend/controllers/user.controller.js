@@ -65,19 +65,19 @@ const getUserData = async (req, res) => {
     // now working with upload files, avatar.
     const avatarLocalPath = req.files?.avatar[0]?.path;
 
-    if(!avatarLocalPath){
-        throw new ApiError(400, "Avatar file is required.");
-    };
+    // if(!avatarLocalPath){
+    //     throw new ApiError(400, "Avatar file is required.");
+    // };
 
-    const avatar = await uploadOnCloudinary(avatarLocalPath);
+    // const avatar = await uploadOnCloudinary(avatarLocalPath);
 
-    if(!avatar){
-        throw new ApiError(500, "Internal server error when uploading file, so upload file again.")
-    };
+    // if(!avatar){
+    //     throw new ApiError(500, "Internal server error when uploading file, so upload file again.")
+    // };
 
     const newUser = await User.create({
         fullName,
-        avatar: avatar.url,
+        // avatar: avatar.url,
         email,
         password,
         username
@@ -108,18 +108,18 @@ const getUserData = async (req, res) => {
     // send cookie
 
     // console.log(req.body)
-    const {username, password, email} = req.body;
+    const {usernameOremail, password} = req.body;
     // const username = req.body.username;
     // const 
 
-    if (!username && !email){
+    if (!usernameOremail){
         throw new ApiError(400, "username or email is required");
     };
 
     const user = await User.findOne({
         $or: [
-            {username},
-            {email}
+            {username: usernameOremail},
+            {email: usernameOremail}
         ]
     });
 
@@ -145,8 +145,19 @@ const getUserData = async (req, res) => {
     // creating and configuring cookie
     const options = {
         httpOnly: true,
-        secure: true
+        secure: true,
+        // sameSite: 'None',
+        // domain: "http://localhost:3000",
+        path: "/"
     };
+
+    // const options = {
+    //     httpOnly: true,
+    //     secure: false, // Set to true if HTTPS is used in production
+    //     sameSite: 'None', // Adjust based on your requirements
+    //     path: '/', // Ensure the cookie is accessible site-wide
+    //     domain: 'localhost', // Domain of your frontend application
+    // };
 
     return res
     .status(200)

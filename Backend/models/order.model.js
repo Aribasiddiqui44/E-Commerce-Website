@@ -131,7 +131,7 @@ const Tax_rate = 17;
 orderSchema.pre("save", async function(next){
     try{
         this.totalAmountBeforeTaxWithoutDiscount = 0.0;
-        this.total
+        // this.total
         // this should be changed as we have chnaged the model.
         for(product of this.Products){
             let rate = parseFloat(product.rate.toString());
