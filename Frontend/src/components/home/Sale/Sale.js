@@ -101,7 +101,7 @@ const Sale = () => {
       <div className="w-full md:w-2/3 lg:w-1/2 h-auto flex flex-col gap-4 lg:gap-10">
         <div className="h-1/2 w-full">
           <Link to="/shop">
-            <Image className="max-h-50 max-w-50 object-cover" imgSrc={imageCloths} />
+            <Image className="h-full w-full object-cover" imgSrc={imageCloths} />
           </Link>
           <div className="text-center mt-4">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">Clothes Sale</h2>
@@ -110,7 +110,7 @@ const Sale = () => {
         </div>
         <div className="h-1/2 w-full">
           <Link to="/shop">
-            <Image className="max-h-50 max-w-40 object-cover" imgSrc={exImg} />
+            <Image className="h-full w-full object-cover" imgSrc={exImg} />
           </Link>
           <div className="text-center mt-4">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">Exclusive Items</h2>
