@@ -21,7 +21,7 @@ const getCoupons = async (req, res) => {
         )
     }
     // maybe in future we merge botht these  queries.
-    let user = await User.findById(req.user._id);
+    // let user = await User.findById(req.user._id);
     // for(let coupon of coupons){
 
     // }
@@ -40,14 +40,21 @@ const getCouponInformation = async (req, res) => {
 const postAddCoupon = asyncHandler( async (req, res) => {
     const { code, discountType, discountValue, minOrderValue, maxDiscountAmount } = req.body;
 
-    if( !req.user.isAdmin ) { // if user is not admin
-        throw new ApiError(401, "Unauthoried requet ! Only admin can add discount coupons");
-    };
+    // if( !req.user.isAdmin ) { // if user is not admin
+    //     throw new ApiError(401, "Unauthoried requet ! Only admin can add discount coupons");
+    // };
 
     if (
-        [ code, discountValue, discountType ].some(field => field.trim() === "")
+        [ code, discountType ].some(field => field.trim() === "")
     ) {
         throw new ApiError(400, "Bad Request! Provide necessary fields.");
+    };
+    if ( !discountValue ) {
+        throw new ApiError(
+            400,
+            "Bad Request , should provide discount value."
+        );
+
     };
 
     const existedCoupon = await Coupon.findOne({code});

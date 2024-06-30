@@ -21,11 +21,11 @@ const couponSchema = new Schema({
     },
     expiryDate: {
         type: Date,
-        required: true
+        // required: true
     },
     minOrderValue: {
         type: Schema.Types.Decimal128,
-        default: null
+        // default: undefined
     },
     maxDiscountAmount: {
         type: Number,

@@ -12,7 +12,7 @@ const router = Router();
 
 router.get("/getAll", getCoupons);
 router.get("/getInfo", getCouponInformation);
-router.post("/post", verifyJWT, postAddCoupon);
+router.post("/post", postAddCoupon);
 router.patch("/patch/status", verifyJWT, patchChangeCouponAvailability);
 router.patch("/patchAvail", verifyJWT, patchAvailCoupon);
 
