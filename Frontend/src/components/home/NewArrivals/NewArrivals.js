@@ -199,7 +199,7 @@ const NewArrivals = () => {
             />
           </div>
         ))}
-        {products.map((product) => (
+        {/* {products.map((product) => (
           <div key={product._id} className="px-2">
             <Product
               _id={product._id}
@@ -237,7 +237,7 @@ const NewArrivals = () => {
               des={product.description}
             />
           </div>
-        ))}
+        ))} */}
       </Slider>
       </div>
     // </div>

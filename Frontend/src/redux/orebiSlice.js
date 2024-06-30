@@ -13,6 +13,7 @@ export const orebiSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
+      
       const item = state.products.find(
         (item) => item._id === action.payload._id
       );
