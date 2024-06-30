@@ -24,6 +24,8 @@ import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Shop from "./pages/Shop/Shop";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SuccessPage from "./pages/StatusPages/SuccessPage";
+import CancelPage from "./pages/StatusPages/CancelPage";
 
 const Layout = () => {
   return (
@@ -68,6 +70,9 @@ const router = createBrowserRouter(
       </Route>
       <Route path="/signup" element={<SignUp />}></Route>
       <Route path="/signin" element={<SignIn />}></Route>
+      <Route path="/success" element={<SuccessPage />}></Route>
+      <Route path="/cancel" element={<CancelPage />}></Route>
+
     </Route>
   )
 );
