@@ -147,7 +147,7 @@ const NewArrivals = () => {
   }, []);
 
   const settings = {
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
@@ -184,6 +184,7 @@ const NewArrivals = () => {
   return (
     <div className="w-full pb-16">
       <Heading heading="New Arrivals" />
+      {/* <div className="flex flex-row flex-wrap"> */}
       <Slider {...settings}>
         {products.map((product) => (
           <div key={product._id} className="px-2">
@@ -198,8 +199,48 @@ const NewArrivals = () => {
             />
           </div>
         ))}
+        {products.map((product) => (
+          <div key={product._id} className="px-2">
+            <Product
+              _id={product._id}
+              img={product.productImageUrl} // Ensure the API provides image URLs
+              productName={product.title}
+              price={product.price}
+              color={product.color}
+              badge={product.badge}
+              des={product.description}
+            />
+          </div>
+        ))}
+        {products.map((product) => (
+          <div key={product._id} className="px-2">
+            <Product
+              _id={product._id}
+              img={product.productImageUrl} // Ensure the API provides image URLs
+              productName={product.title}
+              price={product.price}
+              color={product.color}
+              badge={product.badge}
+              des={product.description}
+            />
+          </div>
+        ))}
+        {products.map((product) => (
+          <div key={product._id} className="px-2">
+            <Product
+              _id={product._id}
+              img={product.productImageUrl} // Ensure the API provides image URLs
+              productName={product.title}
+              price={product.price}
+              color={product.color}
+              badge={product.badge}
+              des={product.description}
+            />
+          </div>
+        ))}
       </Slider>
-    </div>
+      </div>
+    // </div>
   );
 };
 
