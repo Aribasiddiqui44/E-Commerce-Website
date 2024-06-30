@@ -2,6 +2,7 @@ const { Router } = require('express');
 const {
     getProducts,
     postProductSearch,
+    getNewProducts,
     getProductInfo,
     postAddProduct,
     patchAddFeatures,
@@ -19,7 +20,7 @@ router.route(
 ).get( 
     postProductSearch
 );
-
+router.get("/get/new-arrivals", getNewProducts);
 router.get("/get/info", getProductInfo);
 // router.post("/post", postAddProduct);
 router.route("/post").post(

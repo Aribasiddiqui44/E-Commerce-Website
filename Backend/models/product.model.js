@@ -36,6 +36,10 @@ const productSchema = new Schema({
         index: true,
         default: "No"
     },
+    color: {
+        type: String,
+        default: "Not Specified"
+    },
     productImageUrl: {
         type: String,
         required: true,

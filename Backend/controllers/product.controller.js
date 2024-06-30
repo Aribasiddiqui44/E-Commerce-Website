@@ -120,6 +120,33 @@ const getProductInfo = asyncHandler( async (req, res) => {
 
 })
 
+const getNewProducts = asyncHandler( async(req, res) => {
+    let currentDate = new Date();
+    let newProducts = await Product.find({
+        // {createdAt: {
+        //     $gt: currentDate.setDate(currentDate.getDate() - 10)
+        // },
+        isAvailable: true
+    }  
+    ).sort({createdAt: -1  })
+    if ( newProducts.length === 0 ) {
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                [],
+                "No New Arrivals"
+            )
+        )
+    };
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            newProducts
+        )
+    )
+});
+
+
 const postAddProduct = asyncHandler( async (req, res) => {
     // take info -> req.body
     // for picture use middleware multer for uploading picture to backend,
@@ -309,6 +336,7 @@ const  patchChangeAvailabilityOfProduct = asyncHandler ( async (req, res) => {
 module.exports = {
     getProducts,
     postProductSearch,
+    getNewProducts,
     getProductInfo,
     postAddProduct,
     patchAddFeatures,

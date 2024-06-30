@@ -26,6 +26,7 @@ const Product = (props) => {
         item: productItem,
       },
     });
+    // make ApI call here.
   };
 
   const handleWishList = () => {
