@@ -91,9 +91,11 @@ const Sale = () => {
               
               Stay ahead of the tech curve
             </p>
-            <div className=" mb-8">
-              <ShopNow />
-            </div>
+            <Link to="/shop">
+              <div className=" mb-8">
+                <ShopNow />
+              </div>
+            </Link>
           </div>
         </div>
       </div>
