@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
+import axios from 'axios';
 
 const initialState = {
   userInfo: [],
@@ -13,14 +14,18 @@ export const orebiSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      
-      const item = state.products.find(
-        (item) => item._id === action.payload._id
-      );
-      if (item) {
-        item.quantity += action.payload.quantity;
-      } else {
-        state.products.push(action.payload);
+      try {
+          
+        const item = state.products.find(
+          (item) => item._id === action.payload._id
+        );
+        if (item) {
+          item.quantity += action.payload.quantity;
+        } else {
+          state.products.push(action.payload);
+        }
+      } catch (error) {
+        
       }
       // Dispatch a success toast
       toast.success("Product added to cart");
