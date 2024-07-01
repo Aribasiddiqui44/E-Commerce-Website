@@ -15,21 +15,37 @@ const Category = () => {
 
   const category = [
     {
-      _id: 9006,
-      title: "Imprimante",
+      _id: 101,
+      title: "Paintings and Wall Hangings"
     },
     {
-      _id: 9007,
-      title: "Encre",
+      _id: 102,
+      title: "Sofas"
     },
     {
-      _id: 9008,
-      title: "Ruban",
+      _id: 103,
+      title: "Chairs"
     },
     {
-      _id: 9009,
-      title: "Bac de dechet",
-    },
+      _id: 104,
+      title: "All items"
+    }
+    // {
+    //   _id: 9006,
+    //   title: "Imprimante",
+    // },
+    // {
+    //   _id: 9007,
+    //   title: "Encre",
+    // },
+    // {
+    //   _id: 9008,
+    //   title: "Ruban",
+    // },
+    // {
+    //   _id: 9009,
+    //   title: "Bac de dechet",
+    // },
   ];
 
   const handleToggleCategory = (category) => {
@@ -63,7 +79,7 @@ const Category = () => {
               )}
             </li>
           ))}
-          <li onClick={() => console.log(checkedCategorys)}>test</li>
+          <li onClick={() => console.log(checkedCategorys)}></li>
         </ul>
       </div>
     </div>
