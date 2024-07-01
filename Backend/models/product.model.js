@@ -37,6 +37,10 @@ const productSchema = new Schema({
         index: true,
         default: "No"
     },
+    category: {
+        type: String,
+        default: "no"
+    },
     color: {
         type: String,
         default: "Not Specified"

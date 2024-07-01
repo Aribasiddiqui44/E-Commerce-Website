@@ -16,20 +16,17 @@ const Category = () => {
   const category = [
     {
       _id: 101,
-      title: "Paintings and Wall Hangings"
+      title: "Furniture"
     },
     {
       _id: 102,
-      title: "Sofas"
+      title: "Home Decor"
     },
     {
       _id: 103,
-      title: "Chairs"
+      title: "Floor Coverings"
     },
-    {
-      _id: 104,
-      title: "All items"
-    }
+
     // {
     //   _id: 9006,
     //   title: "Imprimante",

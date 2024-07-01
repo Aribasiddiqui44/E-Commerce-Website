@@ -72,7 +72,10 @@ import imageCloths from './../../../assets/images/imageCloths.png';
 import exImg from './../../../assets/images/exImg.png';
 import sofa14 from "./../../../assets/sofa14[1].png"
 import wall from "./../../../assets/wall.webp";
-import table from "./../../../assets/table.jpg"
+import table from "./../../../assets/table.jpg";
+import floor from "./../../../assets/floor.png";
+import floor1 from "./../../../assets/floor1.jpg";
+
 const Sale = () => {
   return (
     <div className="py-20 flex flex-col md:flex-row items-center justify-between gap-4 lg:gap-10">
@@ -83,15 +86,15 @@ const Sale = () => {
         <div className="text-left h-140 md:h-200 lg:h-260 w-full mx-4 ">
           <div className="mx-8">
             <h2 className="text-4xl md:text-5xl lg:text-5xl font-bold mb-6">
-              Electronics
+              Furniture
             </h2>
             <p className="text-lg md:text-xl lg:text-2xl mb-6">
-              New
+              from 
               <span className="text-4xl md:text-5xl lg:text-5xl font-bold">
-                Latest electronic items for you
+                 Our Home to Yours
               </span>{" "}
               
-              Stay ahead of the tech curve
+              - Beautifully designed furniture
             </p>
             <Link to="/shop">
               <div className=" mb-8">
@@ -108,17 +111,17 @@ const Sale = () => {
             <Image className="h-full w-full object-cover" imgSrc={wall} />
           </Link>
           <div className="text-center mt-4">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">Clothes Sale</h2>
-            <p className="text-md md:text-lg lg:text-xl">Refresh your wardrobe with latest styles</p>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">Home Decor</h2>
+            <p className="text-md md:text-lg lg:text-xl">Elegance in Every Detail</p>
           </div>
         </div>
         <div className="h-1/2 w-full">
           <Link to="/shop">
-            <Image className="h-full w-full object-cover" imgSrc={table} />
+            <Image className="h-full w-full object-cover" imgSrc={floor1} />
           </Link>
           <div className="text-center mt-4">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">Exclusive Items</h2>
-            <p className="text-md md:text-lg lg:text-xl">Explore our unique collection of exclusive items</p>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">Floor Coverings</h2>
+            <p className="text-md md:text-lg lg:text-xl">Flooring that Inspires</p>
           </div>
         </div>
       </div>
