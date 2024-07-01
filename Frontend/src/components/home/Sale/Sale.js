@@ -70,13 +70,15 @@ import ShopNow from "../../designLayouts/buttons/ShopNow";
 import image from './../../../assets/images/image.png';
 import imageCloths from './../../../assets/images/imageCloths.png';
 import exImg from './../../../assets/images/exImg.png';
-
+import sofa14 from "./../../../assets/sofa14[1].png"
+import wall from "./../../../assets/wall.webp";
+import table from "./../../../assets/table.jpg"
 const Sale = () => {
   return (
     <div className="py-20 flex flex-col md:flex-row items-center justify-between gap-4 lg:gap-10">
       <div className="bg-[#f3f3f3] w-full md:w-2/3 lg:w-1/2 h-full flex flex-col justify-center items-center text-black">
         <div className="aspect-w-4 aspect-h-3 w-full mb-4">
-          <Image className="h-full w-full object-cover" imgSrc={image} />
+          <Image className="h-full w-full object-cover" imgSrc={sofa14} />
         </div>
         <div className="text-left h-140 md:h-200 lg:h-260 w-full mx-4 ">
           <div className="mx-8">
@@ -103,7 +105,7 @@ const Sale = () => {
       <div className="w-full md:w-2/3 lg:w-1/2 h-auto flex flex-col gap-4 lg:gap-10">
         <div className="h-1/2 w-full">
           <Link to="/shop">
-            <Image className="h-full w-full object-cover" imgSrc={imageCloths} />
+            <Image className="h-full w-full object-cover" imgSrc={wall} />
           </Link>
           <div className="text-center mt-4">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">Clothes Sale</h2>
@@ -112,7 +114,7 @@ const Sale = () => {
         </div>
         <div className="h-1/2 w-full">
           <Link to="/shop">
-            <Image className="h-full w-full object-cover" imgSrc={exImg} />
+            <Image className="h-full w-full object-cover" imgSrc={table} />
           </Link>
           <div className="text-center mt-4">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">Exclusive Items</h2>

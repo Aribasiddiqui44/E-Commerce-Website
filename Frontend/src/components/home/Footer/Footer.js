@@ -116,7 +116,7 @@ const Footer = () => {
               Payment Options
             </li>
           </ul>
-        </div>
+        {/* </div>
         <div className="col-span-2 flex flex-col items-center w-full px-4">
           <FooterListTitle title="Subscribe to our newsletter." />
           <div className="w-full">
@@ -163,7 +163,7 @@ const Footer = () => {
               }`}
               imgSrc={paymentCard}
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

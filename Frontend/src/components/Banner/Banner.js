@@ -6,6 +6,8 @@ import {
   bannerImgTwo,
   bannerImgThree,
 } from "../../assets/images";
+import bannerImg from "./../../assets/bannerImg.png";
+import bannerImg2 from "./../../assets/bannerImg2.png";
 import Image from "../designLayouts/Image";
 
 const CustomSlide = ({ Subtext, imgSrc, text, buttonLink, buttonText }) => (
@@ -21,7 +23,7 @@ const CustomSlide = ({ Subtext, imgSrc, text, buttonLink, buttonText }) => (
     <div
       style={{
         maxWidth: "450px", // Adjust the maxWidth as needed
-        marginRight: "100px", // Add margin between text/button and image
+        marginRight: "80px", // Add margin between text/button and image
       }}
     >
       <h1
@@ -44,7 +46,7 @@ const CustomSlide = ({ Subtext, imgSrc, text, buttonLink, buttonText }) => (
         {Subtext}
       </p>
 
-      <Link to="/about">
+      <Link to={buttonLink}>
         <button className="bg-primeColor text-white text-lg font-bodyFont w-[185px] h-[50px] hover:bg-black duration-300 font-bold">
           {buttonText}
         </button>
@@ -151,29 +153,29 @@ const Banner = () => {
 
   const slides = [
     {
-      imgSrc: bannerImgOne,
-      text: "Enhance Your Printing Experience",
+      imgSrc: bannerImg,
+      text: "Transforming Your Space.",
       Subtext:
-        "Explore our premium printers and consumables for exceptional results",
-      buttonLink: "/offer",
+        "DECORDREAMS, your go-to for stylish home décor and seamless shopping with secure cryptocurrency payments.",
+      buttonLink: "/shop",
       buttonText: "Shop Now",
     },
     {
-      imgSrc: bannerImgOne,
-      text: "Quality Printing Solutions",
+      imgSrc: bannerImg2,
+      text: "Create Luxe Living.",
       Subtext:
-        "Discover our wide range of printers and consumables designed for professional printing needs.",
-      buttonLink: "/shop",
+        "Elevate your home with our curated collection of exquisite furnishings and decor.",
+      buttonLink: "/about",
       buttonText: "About-us",
     },
-    {
-      imgSrc: bannerImgOne,
-      text: "Efficiency Redefined",
-      Subtext:
-        "Maximize productivity with our advanced printers and high-quality consumables. ",
-      buttonLink: "/contact",
-      buttonText: "Contact-us",
-    },
+    // {
+    //   imgSrc: bannerImgOne,
+    //   text: "Efficiency Redefined",
+    //   Subtext:
+    //     "Maximize productivity with our advanced printers and high-quality consumables. ",
+    //   buttonLink: "/contact",
+    //   buttonText: "Contact-us",
+    // },
 
     // Add more slides as needed
   ];
