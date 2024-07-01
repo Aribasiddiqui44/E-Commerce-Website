@@ -23,6 +23,7 @@ import Payment from "./pages/payment/Payment";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Shop from "./pages/Shop/Shop";
 import { ToastContainer } from "react-toastify";
+import Wishlist from "./pages/Wishlist/Wishlist";
 import "react-toastify/dist/ReactToastify.css";
 
 const Layout = () => {
@@ -60,6 +61,7 @@ const router = createBrowserRouter(
         <Route path="/about" element={<About />}></Route>
         <Route path="/contact" element={<Contact />}></Route>
         <Route path="/journal" element={<Journal />}></Route>
+        <Route path="/wishlist" element={<Wishlist />}></Route>
         {/* ==================== Header Navlink End here ===================== */}
         <Route path="/category/:category" element={<Offer />}></Route>
         <Route path="/product/:_id" element={<ProductDetails />}></Route>

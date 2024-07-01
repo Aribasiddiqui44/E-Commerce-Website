@@ -181,7 +181,9 @@ const HeaderBottom = () => {
                 </span>
               </div>
             </Link>
-            <BsSuitHeartFill />
+            <Link to="/wishlist">
+              <BsSuitHeartFill />
+            </Link>
           </div>
         </Flex>
       </div>

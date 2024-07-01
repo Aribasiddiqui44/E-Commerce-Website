@@ -18,8 +18,8 @@ const ShopSideNav = () => {
     </div> */}
       <Category icons={false} />
       {/* <Brand /> */}
-      <Color />
-      <Price />
+      {/* <Color />
+      <Price /> */}
     </div>
 
 

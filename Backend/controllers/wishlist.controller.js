@@ -8,32 +8,66 @@ const asyncHandler = require('./../utils/asyncHandler.js');
 
 const getWishlistOfUser = asyncHandler( async (req, res) => {
     // const wishlist = await Wishlist.findOne({userId: req.user._id});
+    let checkWish = await Wishlist.findOne({userId: req.user._id});
+    console.log(checkWish);
+
+
+    // const wishlistWithProducts = await Wishlist.aggregate([
+    //     { $match:
+    //         { userId: req.user._id } 
+    //     }, // Match the specific wishlist
+    //     { $unwind: "$products" }, // Deconstruct the products array
+    //     {
+    //         $lookup: {
+    //             from: "products", // The collection to join
+    //             localField: "products", // Field from the wishlist collection
+    //             foreignField: "_id", // Field from the products collection
+    //             as: "productDetails" // Output array field
+    //         }
+    //     },
+    //     { $unwind: "$productDetails" }, // Unwind the productDetails array
+    //     {
+    //         $group: {
+    //             _id: "$_id",
+    //             userId: { $first: "$userId" },
+    //             createdAt: { $first: "$createdAt" },
+    //             updatedAt: { $first: "$updatedAt" },
+    //             products: {
+    //                 $push: "$productDetails"
+    //             }
+    //         }
+    //     }
+    // ]);
+
+
     const wishlistWithProducts = await Wishlist.aggregate([
-        { $match:
-            { userId: req.user._id } 
-        }, // Match the specific wishlist
-        { $unwind: "$products" }, // Deconstruct the products array
         {
-            $lookup: {
-                from: "products", // The collection to join
-                localField: "products", // Field from the wishlist collection
-                foreignField: "_id", // Field from the products collection
-                as: "productDetails" // Output array field
-            }
+          $match: {
+            userId: req.user._id
+          }
         },
-        { $unwind: "$productDetails" }, // Unwind the productDetails array
+        { $unwind: "$products" },
         {
-            $group: {
-                _id: "$_id",
-                userId: { $first: "$userId" },
-                createdAt: { $first: "$createdAt" },
-                updatedAt: { $first: "$updatedAt" },
-                products: {
-                    $push: "$productDetails"
-                }
+          $lookup: {
+            from: "products",
+            localField: "products",
+            foreignField: "_id",
+            as: "productDetails"
+          }
+        },
+        { $unwind: "$productDetails" },
+        {
+          $group: {
+            _id: "$_id",
+            userId: { $first: "$userId" },
+            createdAt: { $first: "$createdAt" },
+            updatedAt: { $first: "$updatedAt" },
+            products: {
+              $push: "$productDetails"
             }
+          }
         }
-    ]);
+      ]);
 
     res.status(200).json(
         new ApiResponse(
