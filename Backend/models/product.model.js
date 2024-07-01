@@ -24,6 +24,7 @@ const productSchema = new Schema({
     brand: {
         type: String,
         // required: false, 
+        unique: false,
         lowercase: true,
         trim: true,
         default: "No"
@@ -43,7 +44,7 @@ const productSchema = new Schema({
     productImageUrl: {
         type: String,
         required: true,
-        unique: true,
+        unique: false,
     },
     features: [
         {
