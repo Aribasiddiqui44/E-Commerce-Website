@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 const Wishlist = () => {
-  const [itemsPerPage, setItemsPerPage] = useState(48);
+  const [itemsPerPage, setItemsPerPage] = useState(12);
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,6 +26,7 @@ const Wishlist = () => {
             const response = await axios.get("http://localhost:8000/wishlist/get", {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('accessToken')}`
+                    // Cookies: {accessToken: Cookies.get('accessToken') }
                 }
             });
             console.log(response.data.data);
