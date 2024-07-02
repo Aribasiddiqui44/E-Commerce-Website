@@ -10,6 +10,7 @@ const verifyJWT = asyncHandler ( async (req, res, next) => {
     try {
         const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
         const cookieRefreshToken = req.cookies?.refreshToken;
+        // console.log(token);
         // console.log('13 doing aurh')
         if ( !token ) {
             // console.log('going wrong 15');

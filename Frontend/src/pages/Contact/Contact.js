@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Breadcrumbs from "../../components/pageProps/Breadcrumbs";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 const Contact = () => {
   const location = useLocation();
@@ -41,26 +44,43 @@ const Contact = () => {
   };
   // ================= Email Validation End here ===============
 
-  const handlePost = (e) => {
+  const handlePost = async(e) => {
     e.preventDefault();
-    if (!clientName) {
-      setErrClientName("Enter your Name");
+    // if (!clientName) {
+    //   setErrClientName("Enter your Name");
+    // }
+    // if (!email) {
+    //   setErrEmail("Enter your Email");
+    // } else {
+    //   if (!EmailValidation(email)) {
+    //     setErrEmail("Enter a Valid Email");
+    //   }
+    // }
+    if (!messages || messages.trim() === "") {
+      setErrMessages("Enter your Message or Feedback for us to Improve");
     }
-    if (!email) {
-      setErrEmail("Enter your Email");
-    } else {
-      if (!EmailValidation(email)) {
-        setErrEmail("Enter a Valid Email");
+    try{
+      if ( Cookies.get('accessToken') ) {
+
+        let response = await axios.post("http://localhost:8000/message/post",
+          {
+            message: messages
+          }, {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('accessToken')}`
+          }
+        });
+        toast.success("Thank you dear, Your messages has been received successfully.");
+        setMessages("")
+      } else {
+        toast.error("Please login for giving your feedback.");
       }
+
+    } catch(error) {
+      toast.error(error.message);
+      console.log(error);
     }
-    if (!messages) {
-      setErrMessages("Enter your Messages");
-    }
-    if (clientName && email && EmailValidation(email) && messages) {
-      setSuccessMsg(
-        `Thank you dear ${clientName}, Your messages has been received successfully. Futher details will sent to you by your email at ${email}.`
-      );
-    }
+
   };
 
   return (
@@ -71,9 +91,9 @@ const Contact = () => {
       ) : (
         <form className="pb-20">
           <h1 className="font-titleFont font-semibold text-3xl">
-            Fill up a Form
+            Write your Message Here, For Us
           </h1>
-          <div className="w-[500px] h-auto py-6 flex flex-col gap-6">
+          {/* <div className="w-[500px] h-auto py-6 flex flex-col gap-6">
             <div>
               <p className="text-base font-titleFont font-semibold px-2">
                 Name
@@ -91,8 +111,8 @@ const Contact = () => {
                   {errClientName}
                 </p>
               )}
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
               <p className="text-base font-titleFont font-semibold px-2">
                 Email
               </p>
@@ -109,11 +129,11 @@ const Contact = () => {
                   {errEmail}
                 </p>
               )}
-            </div>
+            </div> */}
             <div>
-              <p className="text-base font-titleFont font-semibold px-2">
+              {/* <p className="text-base font-titleFont font-semibold px-2">
                 Messages
-              </p>
+              </p> */}
               <textarea
                 onChange={handleMessages}
                 value={messages}
@@ -136,7 +156,7 @@ const Contact = () => {
             >
               Post
             </button>
-          </div>
+          {/* </div> */}
         </form>
       )}
     </div>

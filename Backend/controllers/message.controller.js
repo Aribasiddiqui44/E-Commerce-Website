@@ -6,9 +6,9 @@ const ApiError = require('./../utils/ApiError.js');
 const ApiResponse = require('./../utils/ApiResponse.js');
 
 const postMessage = asyncHandler( async (req, res) => {
-    const {name, email, message} = req.body;
+    const {message} = req.body;
     if (
-        [name, email, message].some((field) => field.trim() === '') 
+        [message].some((field) => field?.trim() === '') 
     ) {
         throw new ApiError(400, "Bad Request, Provide all fields")
     };
@@ -17,7 +17,7 @@ const postMessage = asyncHandler( async (req, res) => {
         userId: req.user._id,
         name: req.user.fullName,
         email: req.user.email,
-        message
+        message: message.trim()
     });
     let checkMessage = await Message.findById(newMessage._id);
     if ( !checkMessage ) {
@@ -27,7 +27,7 @@ const postMessage = asyncHandler( async (req, res) => {
     res.status(201).json(
         new ApiResponse(201, checkMessage, "Message added Successfully")
     );
-    
+
 });
 
 
