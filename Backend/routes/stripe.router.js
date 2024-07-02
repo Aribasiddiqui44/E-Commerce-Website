@@ -21,7 +21,7 @@ router.post("/create-checkout-session",async(req,res)=> {
             payment_method_types:["card"],
             line_items:lineItems,
             mode:"payment",
-            success_url:"http://127.0.0.1:3000/shop",
+            success_url:"http://127.0.0.1:3000/success",
             cancel_url:"http://127.0.0.1:3000/cancel",
         })
         res.json({id:session.id})

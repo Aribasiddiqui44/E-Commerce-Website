@@ -4,7 +4,7 @@ import './../PaymentSuccess/PaymentSuccessPage.css';
 import { FaCheckCircle } from 'react-icons/fa';
 import { FaTimesCircle } from 'react-icons/fa';
 
-const Success = () => {
+const Cancel = () => {
   return (
     <div className="container1">
       <div className="card1">
@@ -16,9 +16,9 @@ const Success = () => {
             </div> 
           </div> 
           <div>
-        <Link to="/shop">
+        <Link to="/cart">
           <button className="w-52 h-10 bg-primeColor text-white hover:bg-black duration-300">
-            Continue Shopping
+            Go Back To Cart
           </button>
         </Link>
       </div>
@@ -26,4 +26,4 @@ const Success = () => {
     </div>
   );
 }
-export default Success;
+export default Cancel;
