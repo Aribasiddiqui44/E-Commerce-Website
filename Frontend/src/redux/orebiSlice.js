@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import axios from 'axios';
+import Cookies from "js-cookie";
+
 
 const initialState = {
   userInfo: [],
