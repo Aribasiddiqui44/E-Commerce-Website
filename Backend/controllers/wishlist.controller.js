@@ -9,7 +9,7 @@ const asyncHandler = require('./../utils/asyncHandler.js');
 const getWishlistOfUser = asyncHandler( async (req, res) => {
     // const wishlist = await Wishlist.findOne({userId: req.user._id});
     let checkWish = await Wishlist.findOne({userId: req.user._id});
-    console.log(checkWish);
+    // console.log(checkWish);
 
 
     // const wishlistWithProducts = await Wishlist.aggregate([

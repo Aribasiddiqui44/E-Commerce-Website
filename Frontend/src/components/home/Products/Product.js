@@ -9,19 +9,21 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../redux/orebiSlice";
 import { toast } from "react-toastify";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const Product = (props) => {
   const dispatch = useDispatch();
-  const _id = props.productName;
-  const idString = (_id) => {
-    return String(_id).toLowerCase().split(" ").join("");
-  };
-  const rootId = idString(_id);
+  // const _id = props.productName;
+  // const idString = (_id) => {
+  //   return String(_id).toLowerCase().split(" ").join("");
+  // };
+  // const rootId = idString(_id);
   const [wishList, setWishList] = useState([]);
   const navigate = useNavigate();
   const productItem = props;
   const handleProductDetails = () => {
-    navigate(`/product/${rootId}`, {
+    navigate(`/product/${props.productName}`, {
       state: {
         item: productItem,
       },
@@ -29,10 +31,36 @@ const Product = (props) => {
     // make ApI call here.
   };
 
-  const handleWishList = () => {
-    toast.success("Product add to wish List");
-    setWishList(wishList.push(props));
-    console.log(wishList);
+  const handleWishList = async () => {
+    
+    try {
+      // let response = await axios.post('http://localhost:8000/wishlist/patch', {
+        //   productId: props._id,
+        // })
+        
+        if ( Cookies.get('accessToken')){
+          
+          const response = await axios.patch("http://localhost:8000/wishlist/patch",
+            {
+              productId: props._id
+            },
+            {
+            headers: {
+              Authorization: `Bearer ${Cookies.get('accessToken')}`
+              // Cookies: {accessToken: Cookies.get('accessToken') }
+            }
+          });
+          console.log(response);
+          toast.success(`${props.productName} is added to Favourites`);
+          setWishList(wishList.push(props));
+          // console.log(wishList);
+          
+        } else {
+      toast.error("Login to add item to wishlist.");
+    }
+   } catch (error) {
+      toast.error(error.message);
+    }
   };
   return (
     <div className="flex flex-row flex-wrap">

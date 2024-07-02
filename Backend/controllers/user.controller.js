@@ -1,10 +1,11 @@
-const User = require('../models/user.model.js');
+const User = require('./../models/user.model.js');
 
 const asyncHandler  = require('./../utils/asyncHandler.js');
 const ApiError = require('./../utils/ApiError.js');
 const ApiResponse = require('./../utils/ApiResponse.js');
 
 const uploadOnCloudinary = require('./../services/cloudinary.service.js');
+const Wishlist = require('./../models/wishlist.model.js');
 
 const generateAccessAndRefreshTokens = async (userId) => {
     try{
@@ -87,6 +88,13 @@ const getUserData = async (req, res) => {
     let checkUser = await User.findById(newUser._id).select(
         "-password -refreshToken"
     );
+    let wishlist = Wishlist.create(
+        {
+            userId: checkUser._id,
+            products: []
+        }
+    );
+
 
     if(!checkUser){
         throw new ApiError(500, "Internal Server Error. Something went wrong while creating user on Mongo.")
