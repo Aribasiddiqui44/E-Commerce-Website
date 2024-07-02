@@ -24,6 +24,8 @@ import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Shop from "./pages/Shop/Shop";
 import { ToastContainer } from "react-toastify";
 import Wishlist from "./pages/Wishlist/Wishlist";
+import Success from "./pages/PaymentSuccess/PaymentSuccess";
+import Cancel from "./pages/PaymentFailed.js/PaymentFailed";
 import "react-toastify/dist/ReactToastify.css";
 
 const Layout = () => {
@@ -67,6 +69,8 @@ const router = createBrowserRouter(
         <Route path="/product/:_id" element={<ProductDetails />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/paymentgateway" element={<Payment />}></Route>
+        <Route path="/success" element={<Success />}></Route>
+        <Route path="/cancel" element={<Cancel />}></Route>
       </Route>
       <Route path="/signup" element={<SignUp />}></Route>
       <Route path="/signin" element={<SignIn />}></Route>
