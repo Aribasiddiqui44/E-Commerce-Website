@@ -5,7 +5,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 router.post("/create-checkout-session",async(req,res)=> {
     try {
         const {products} = req.body;
-        console.log(products);
+        // console.log(products);
         const lineItems = products.map((product) => ({
             price_data:{
                 currency:"usd",

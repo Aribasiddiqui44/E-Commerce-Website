@@ -30,7 +30,7 @@ const Wishlist = () => {
                 }
             });
             console.log(response.data.data);
-            setWishlist(response.data.data);
+            setWishlist(response.data.data.products);
             setLoading(false);
           } catch (err) {
             setError(err.message);
@@ -74,6 +74,7 @@ const Wishlist = () => {
                 color={product.color}
                 badge={product.badge}
                 des={product.description}
+                isWishlistPage={true}
               />
             ))}
           </div>

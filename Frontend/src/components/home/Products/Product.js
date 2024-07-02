@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { BsSuitHeartFill } from "react-icons/bs";
 import { GiReturnArrow } from "react-icons/gi";
 import { FaShoppingCart } from "react-icons/fa";
+import { LuHeartOff } from "react-icons/lu";
+import { IoHeartDislike } from "react-icons/io5";
 import { MdOutlineLabelImportant } from "react-icons/md";
 import Image from "../../designLayouts/Image";
 import Badge from "./Badge";
@@ -62,6 +64,10 @@ const Product = (props) => {
       toast.error(error.message);
     }
   };
+
+  const handleRemoveFromWishlist = async () => {
+
+  }
   return (
     <div className="flex flex-row flex-wrap">
       <div className="w-full relative group">
@@ -110,7 +116,7 @@ const Product = (props) => {
                   <MdOutlineLabelImportant />
                 </span>
               </li>
-              <li
+              {/* <li
                 onClick={handleWishList}
                 className="text-[#767676] hover:text-primeColor text-sm font-normal border-b-[1px] border-b-gray-200 hover:border-b-primeColor flex items-center justify-end gap-2 hover:cursor-pointer pb-1 duration-300 w-full"
               >
@@ -118,7 +124,30 @@ const Product = (props) => {
                 <span>
                   <BsSuitHeartFill />
                 </span>
-              </li>
+              </li> */}
+              {!props.isWishlistPage ? (
+                <li
+                  onClick={handleWishList}
+                  className="text-[#767676] hover:text-primeColor text-sm font-normal border-b-[1px] border-b-gray-200 hover:border-b-primeColor flex items-center justify-end gap-2 hover:cursor-pointer pb-1 duration-300 w-full"
+                >
+                  Add to Wish List
+                  <span>
+                    <BsSuitHeartFill />
+                  </span>
+                </li>
+              ) : (
+                <li
+                  onClick={handleRemoveFromWishlist}
+                  className="text-[#767676] hover:text-primeColor text-sm font-normal border-b-[1px] border-b-gray-200 hover:border-b-primeColor flex items-center justify-end gap-2 hover:cursor-pointer pb-1 duration-300 w-full"
+                >
+                  Remove from Wish List
+                  <span>
+                    {/* <BsSuitHeartFill /> */}
+                    {/* <LuHeartOff /> */}
+                    <IoHeartDislike />
+                  </span>
+                </li>
+              )}
             </ul>
           </div>
         </div>

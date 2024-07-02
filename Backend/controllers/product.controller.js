@@ -23,21 +23,22 @@ const getProducts = asyncHandler( async (req, res) => {
 
     const products = await Product.find({
         isAvailable: true
-    }).sort({ createdAt: -1 });
+    });
 
+    
     // Pagination can be done in future, so that specific quantity of data provided in one page.
     //options for pagination
-    const options = {
-        page: parseInt(page, 10) || 1,
-        limit: parseInt(limit, 10) || 10,
-    };
-    const result = await Product.aggregatePaginate(products, options);
+    // const options = {
+    //     page: parseInt(page, 10) || 1,
+    //     limit: parseInt(limit, 10) || 10,
+    // };
+    // const result = await Product.aggregatePaginate(products, options);
 
 
     res.status(200).json(
         new ApiResponse(
             200,
-            result,
+            products,
             "Products fetched successfully"
         )
     );

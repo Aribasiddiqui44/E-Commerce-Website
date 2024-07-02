@@ -238,7 +238,7 @@ const Pagination = ({ itemsPerPage }) => {
       try {
         const response = await axios.get("http://localhost:8000/product/getAll");
         console.log(response.data.data);
-        setProducts(response.data.data.docs);
+        setProducts(response.data.data);
         setLoading(false);
       } catch (error) {
         setError(error.message);
