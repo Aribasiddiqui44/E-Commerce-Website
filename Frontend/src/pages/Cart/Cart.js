@@ -309,6 +309,7 @@ import Breadcrumbs from "../../components/pageProps/Breadcrumbs";
 import { resetCart } from "../../redux/orebiSlice";
 import { emptyCart } from "../../assets/images/index";
 import ItemCard from "./ItemCard";
+import { loadStripe } from "@stripe/stripe-js";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -405,7 +406,34 @@ const Cart = () => {
       alert("MetaMask is not installed!");
     }
   };
-  
+  const makePayment = async () => {
+    const stripe = await loadStripe("pk_test_51PRAPv03Z4tzZiMX1RV5qtglAeWjlaX6J1tmN4wLokUSuLRbyplAN53w6RoeiYkmcSD5Wk4cCYsiRUgxrE0eb9F600TRs1I1h5");
+    console.log(products);
+    const body = {
+      products: products
+    }
+    const headers = {
+      "Content-Type":"application/json"
+    }
+    const response = await fetch('http://localhost:8000/stripe/create-checkout-session', {
+      method: "POST",
+      headers: headers,
+      body:JSON.stringify(body)
+    })
+    if (!response.ok) {
+      console.error('Error:', response.statusText);
+      throw new Error('Network response was not ok');
+    }  
+
+    const session = await response.json();
+
+    const result = stripe.redirectToCheckout({
+      sessionId:session.id
+    })
+    
+  }
+
+
 
   return (
     <div className="max-w-container mx-auto px-4">
@@ -480,9 +508,16 @@ const Cart = () => {
               <div className="flex justify-end">
                   <button onClick={handlePayment}
                   className="w-52 h-10 bg-primeColor text-white hover:bg-black duration-300 ">
-                    Pay Now
+                    Pay With Metamask
                   </button>
               </div>
+              <div className="flex justify-end">
+                  <button onClick={makePayment}
+                  className="w-52 h-10 bg-primeColor text-white hover:bg-black duration-300 ">
+                    Pay With Card
+                  </button>
+              </div>
+
             </div>
           </div>
         </div>

@@ -13,6 +13,7 @@ const CouponRouter = require('./routes/coupon.router.js');
 const UsedCouponRouter = require('./routes/usedCoupon.router.js');
 const OrderRouter = require('./routes/order.router.js');
 const PaymentRouter = require('./routes/payment.router.js');
+const StripeRouter = require('./routes/stripe.router.js');
 
 dotenv.config({
     path: './.env'
@@ -42,3 +43,4 @@ app.use("/coupon", CouponRouter);
 app.use("/useCoupon", UsedCouponRouter);
 app.use("/order", OrderRouter);
 app.use("/payment", PaymentRouter);
+app.use("/stripe", StripeRouter);
