@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { productOfTheYear } from "../../../assets/images";
 import ShopNow from "../../designLayouts/buttons/ShopNow";
 import Image from "../../designLayouts/Image";
+import yearprodImg from "./../../../assets/lowerbanner.png";
 
 const YearProduct = () => {
   return (
@@ -17,8 +18,7 @@ const YearProduct = () => {
             Product of The year
           </h1>
           <p className="text-base font-normal text-primeColor max-w-[600px] mr-4">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat
-            cupiditate modi amet! Facilis, aperiam quaerat.
+          Add a touch of modern sophistication with minimalist abstract faces and a chic black vase.
           </p>
           <ShopNow />
         </div>
