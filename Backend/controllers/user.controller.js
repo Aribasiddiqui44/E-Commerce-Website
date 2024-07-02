@@ -6,6 +6,7 @@ const ApiResponse = require('./../utils/ApiResponse.js');
 
 const uploadOnCloudinary = require('./../services/cloudinary.service.js');
 const Wishlist = require('./../models/wishlist.model.js');
+const Cart = require('./../models/cart.model.js');
 
 const generateAccessAndRefreshTokens = async (userId) => {
     try{
@@ -88,12 +89,16 @@ const getUserData = async (req, res) => {
     let checkUser = await User.findById(newUser._id).select(
         "-password -refreshToken"
     );
-    let wishlist = Wishlist.create(
+    let wishlist = await Wishlist.create(
         {
             userId: checkUser._id,
             products: []
         }
     );
+    let cart = await Cart.create({
+        customerId: checkUser._id,
+        productsList: []
+    });
 
 
     if(!checkUser){
