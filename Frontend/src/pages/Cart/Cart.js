@@ -460,7 +460,7 @@ const Cart = () => {
           >
             Reset cart
           </button>
-
+{/* 
           <div className="flex flex-col mdl:flex-row justify-between border py-4 px-4 items-center gap-2 mdl:gap-0">
             <div className="flex items-center gap-4">
               <input
@@ -473,8 +473,8 @@ const Cart = () => {
             </div>
             <button className="text-lg font-semibold text-sm mdl:text-base font-semibold"
             onClick={applyCode}>Update Cart</button>
-          </div>
-          <div className="max-w-7xl gap-4 flex justify-end mt-4">
+          </div> */}
+          {/* <div className="max-w-7xl gap-4 flex justify-end mt-4">
             <div className="w-96 flex flex-col gap-4">
               <h1 className="text-2xl font-semibold text-right">Cart totals</h1>
               <div>
@@ -496,7 +496,7 @@ const Cart = () => {
                   ${(totalAmt + shippingCharge - discount).toFixed(2)}
                   </span>
                 </p>
-              </div>
+              </div> */}
               {/* <div className="flex justify-end">
                 <Link to="/paymentgateway">
                   <button onClick={handlePayment}
@@ -517,10 +517,11 @@ const Cart = () => {
                     Pay With Card
                   </button>
               </div>
+              
 
             </div>
-          </div>
-        </div>
+        //   </div>
+        // </div>
       ) : (
         <motion.div
           initial={{ y: 30, opacity: 0 }}
