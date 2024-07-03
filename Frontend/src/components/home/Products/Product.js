@@ -54,7 +54,7 @@ const Product = (props) => {
           });
           console.log(response);
           toast.success(`${props.productName} is added to Favourites`);
-          setWishList(wishList.push(props));
+          setWishList(response.data.data.products);
           // console.log(wishList);
           
         } else {
@@ -66,6 +66,35 @@ const Product = (props) => {
   };
 
   const handleRemoveFromWishlist = async () => {
+    
+      try {
+        // let response = await axios.post('http://localhost:8000/wishlist/patch', {
+          //   productId: props._id,
+          // })
+          
+          if ( Cookies.get('accessToken')){
+            
+            const response = await axios.patch("http://localhost:8000/wishlist/patch/remove",
+              {
+                productId: props._id
+              },
+              {
+              headers: {
+                Authorization: `Bearer ${Cookies.get('accessToken')}`
+                // Cookies: {accessToken: Cookies.get('accessToken') }
+              }
+            });
+            console.log(response);
+            toast.success(`${props.productName} is removed from Favourites`);
+            setWishList(response.data.data.products);
+            // console.log(wishList);
+            
+          } else {
+        toast.error("Login to remove item from wishlist.");
+      }
+     } catch (error) {
+        toast.error(error.message);
+      }
 
   }
   return (
@@ -285,4 +314,6 @@ export default Product;
 // };
 
 // export default Product;
+
+
 

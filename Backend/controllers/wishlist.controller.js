@@ -180,7 +180,7 @@ const patchRemoveProduct = asyncHandler( async (req, res) => {
             new: true
         }
     );
-
+    console.log(updatedWishlist)
     if ( !updatedWishlist ){
         throw new ApiError(
             400,

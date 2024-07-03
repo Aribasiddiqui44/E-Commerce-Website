@@ -310,12 +310,15 @@ import { resetCart } from "../../redux/orebiSlice";
 import { emptyCart } from "../../assets/images/index";
 import ItemCard from "./ItemCard";
 import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
+import Cookies from "js-cookie";
+import {toast} from "react-toastify";
 
 const Cart = () => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.orebiReducer.products);
-  const [totalAmt, setTotalAmt] = useState("");
-  const [shippingCharge, setShippingCharge] = useState("");
+  const [totalAmt, setTotalAmt] = useState(0.00);
+  const [shippingCharge, setShippingCharge] = useState(0.00);
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [isCart, setIsCart] = useState(false);
@@ -329,15 +332,21 @@ const Cart = () => {
     setTotalAmt(price);
   }, [products]);
   useEffect(() => {
-    if (totalAmt <= 200) {
-      setShippingCharge(1);
-    } 
-    // else if (totalAmt <= 400) {
-    //   setShippingCharge(25);
+    // if (totalAmt <= 200) {
+    //   setShippingCharge(1);
     // } 
-    else if (totalAmt > 201) {
-      setShippingCharge(10);
-    }
+    // // else if (totalAmt <= 400) {
+    // //   setShippingCharge(25);
+    // // } 
+    // else if (totalAmt > 201) {
+    //   setShippingCharge(10);
+    // }
+    let price = 0;
+    products.map((item) => {
+      price += (item.price*0.17) * item.quantity;
+      return price;
+    });
+    setShippingCharge(parseFloat(price.toFixed(2)))
   }, [totalAmt]);
 
   const applyCode = () => {
@@ -349,7 +358,26 @@ const Cart = () => {
       alert("Invalid coupon code");
     }
   };
+  const placeOrder = async() => {
+    try {
+      console.log(products.length === 0 ? "Return problem" : "No");
+      let response = await axios.post("http://localhost:8000/order/place", {
+        products: products,
+        amountBeforeTax:totalAmt,
+        totalAfterTax: totalAmt + shippingCharge
+      }, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('accessToken')}`
+        }
+      });
+      console.log(response);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  
   const handlePayment = async () => {
+
     if (typeof window.ethereum !== "undefined") {
       const web3 = new Web3(window.ethereum);
       try {
@@ -362,9 +390,9 @@ const Cart = () => {
         }
         const account = accounts[0];
         console.log("MetaMask account:", account);
-  
+        // await placeOrder();
         const totalAmountInEth = web3.utils.toWei(
-          ((totalAmt + shippingCharge - discount) / 1000).toString(),
+          ((totalAmt + shippingCharge) / 1000).toString(),
           "ether"
         );
         console.log("Total amount in ETH:", totalAmountInEth);
@@ -410,11 +438,13 @@ const Cart = () => {
     const stripe = await loadStripe("pk_test_51PRAPv03Z4tzZiMX1RV5qtglAeWjlaX6J1tmN4wLokUSuLRbyplAN53w6RoeiYkmcSD5Wk4cCYsiRUgxrE0eb9F600TRs1I1h5");
     console.log(products);
     const body = {
-      products: products
+      products: products,
+      totalAmount: totalAmt + shippingCharge
     }
     const headers = {
       "Content-Type":"application/json"
     }
+    await placeOrder();
     const response = await fetch('http://localhost:8000/stripe/create-checkout-session', {
       method: "POST",
       headers: headers,
@@ -460,8 +490,8 @@ const Cart = () => {
           >
             Reset cart
           </button>
-{/* 
-          <div className="flex flex-col mdl:flex-row justify-between border py-4 px-4 items-center gap-2 mdl:gap-0">
+
+          {/* <div className="flex flex-col mdl:flex-row justify-between border py-4 px-4 items-center gap-2 mdl:gap-0">
             <div className="flex items-center gap-4">
               <input
                 className="w-44 mdl:w-52 h-8 px-4 border text-primeColor text-sm outline-none border-gray-400"
@@ -474,7 +504,7 @@ const Cart = () => {
             <button className="text-lg font-semibold text-sm mdl:text-base font-semibold"
             onClick={applyCode}>Update Cart</button>
           </div> */}
-          {/* <div className="max-w-7xl gap-4 flex justify-end mt-4">
+           <div className="max-w-7xl gap-4 flex justify-end mt-4">
             <div className="w-96 flex flex-col gap-4">
               <h1 className="text-2xl font-semibold text-right">Cart totals</h1>
               <div>
@@ -485,7 +515,7 @@ const Cart = () => {
                   </span>
                 </p>
                 <p className="flex items-center justify-between border-[1px] border-gray-400 border-b-0 py-1.5 text-lg px-4 font-medium">
-                  Shipping Charge
+                  Tax
                   <span className="font-semibold tracking-wide font-titleFont">
                     ${shippingCharge}
                   </span>
@@ -493,10 +523,10 @@ const Cart = () => {
                 <p className="flex items-center justify-between border-[1px] border-gray-400 py-1.5 text-lg px-4 font-medium">
                   Total
                   <span className="font-bold tracking-wide text-lg font-titleFont">
-                  ${(totalAmt + shippingCharge - discount).toFixed(2)}
+                  ${(totalAmt + shippingCharge)}
                   </span>
                 </p>
-              </div> */}
+              </div>
               {/* <div className="flex justify-end">
                 <Link to="/paymentgateway">
                   <button onClick={handlePayment}

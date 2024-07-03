@@ -18,6 +18,7 @@ const orderSchema = new Schema({
     orderStatus: { // Processing, Dispatched, Shipped, On the way, Delivered  or Cancelled.
         type: String,
         default: "Processing"
+        
     },
     products: [
         {
@@ -86,12 +87,12 @@ const orderSchema = new Schema({
         // }
         address: {
             type: String,
-            requried: true,
+            // requried: true,
             trim: true
         },
         postalCode: {
             type: Number,
-            required: true
+            // required: true
         },
         otherInformation: {
             // such as near ____ building, etc.
@@ -115,7 +116,7 @@ const orderSchema = new Schema({
     },
     paymentStatus: {
         type: String, // paid and unpaid
-        required: true,
+        // required: true,
     },
     trackingNumber: {
         type: String,
@@ -128,38 +129,38 @@ const orderSchema = new Schema({
 });
 
 const Tax_rate = 17;
-orderSchema.pre("save", async function(next){
-    try{
-        this.totalAmountBeforeTaxWithoutDiscount = 0.0;
-        // this.total
-        // this should be changed as we have chnaged the model.
-        for(product of this.Products){
-            let rate = parseFloat(product.rate.toString());
-            // let discount = parseFloat(product.discount ? product.discount.toString() : '0');
-            // product.priceBeforeDiscount = rate*product.quantity;
+// orderSchema.pre("save", async function(next){
+//     try{
+//         this.totalAmountBeforeTaxWithoutDiscount = 0.0;
+//         // this.total
+//         // this should be changed as we have chnaged the model.
+//         for(product of this.Products){
+//             let rate = parseFloat(product.rate.toString());
+//             // let discount = parseFloat(product.discount ? product.discount.toString() : '0');
+//             // product.priceBeforeDiscount = rate*product.quantity;
             
-            product.preTaxPrice = rate*product.quantity;
+//             product.preTaxPrice = rate*product.quantity;
             
-            product.afterTaxPrice = product.preTaxPrice * (1 + Tax_rate);
-            this.totalAmountBeforeTaxWithoutDiscount += product.preTaxPrice;
-        }
-        this.totalAmountAfterTax = this.totalAmountBeforeTaxWithoutDiscount*(1+Tax_rate);
+//             product.afterTaxPrice = product.preTaxPrice * (1 + Tax_rate);
+//             this.totalAmountBeforeTaxWithoutDiscount += product.preTaxPrice;
+//         }
+//         this.totalAmountAfterTax = this.totalAmountBeforeTaxWithoutDiscount*(1+Tax_rate);
 
-        let discountAmount = (this.discount/100)*product.this.totalAmountAfterTax;
-        // this.discount = discountAmount;
-        this.totalAmountAfterDiscountAfterTax = this.totalAmountAfterTax - discountAmount;
+//         let discountAmount = (this.discount/100)*product.this.totalAmountAfterTax;
+//         // this.discount = discountAmount;
+//         this.totalAmountAfterDiscountAfterTax = this.totalAmountAfterTax - discountAmount;
 
 
-        // const totalAmount = this.Products.reduce((sum, product) => {
-        //     return sum + parseFloat(product.afterTaxPrice.toString());
-        // }, 0);
+//         // const totalAmount = this.Products.reduce((sum, product) => {
+//         //     return sum + parseFloat(product.afterTaxPrice.toString());
+//         // }, 0);
 
-        // this.totalAmount = totalAmount;
+//         // this.totalAmount = totalAmount;
 
-        next();
-    }catch(error){
-        next(error);
-    }
-});
+//         next();
+//     }catch(error){
+//         next(error);
+//     }
+// });
 const Order = mongoose.model("Order", orderSchema);
 module.exports = Order;

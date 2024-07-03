@@ -18,13 +18,13 @@ const getOrderHistory = asyncHandler( async (req, res) => {
 });
 
 const postPlaceOrder = asyncHandler( async (req, res) => {
-    const { cartId, shippingAddress, couponIdApplied } = req.body;
-    if ( !cartId ){
-        throw new ApiError(
-            400,
-            "Bad Request, need the cartId"
-        );
-    };
+    const { shippingAddress, products, amountBeforeTax, totalAfterTax } = req.body;
+    // if ( !cartId ){
+    //     throw new ApiError(
+    //         400,
+    //         "Bad Request, need the cartId"
+    //     );
+    // };
     // take cart
     // place the products of cart in order
     // make payment object with payment amount of order.
@@ -38,137 +38,147 @@ const postPlaceOrder = asyncHandler( async (req, res) => {
     
     // let cart = await Cart.findById(cartId);
 
-    let cart = await Cart.aggregate([
-        {
-            $match: {
-                _id: cartId
-            }
-        },
-        {
-            $unwind: "$productsList"
-        },
-        {
-            $lookup: {
-                from: "products",
-                localField: "productsList.productId",
-                foreignField: "_id",
-                as: "productDetails"
-            }
-        },
-        {
-            $unwind: "$productDetails"
-        },
-        {
-            $group: {
-                _id: "$_id",
-                customerId: {
-                    $first : "$customerId"
-                },
-                productsList: {
-                    $push: {
-                        productId: "$productsList.productId",
-                        quantity: "$productsList.quantity",
-                        totalCost: "$productsList.totalCost",
-                        isAvailable: "$productsList.isAvailable",
-                        dateAdded: "$productsList.dateAdded",
-                        productDetails: "$productsList.productDetails"
-                    }
-                },
-                totalPriceOfProductsInCart: {
-                    $first: "$totalPriceOfProductsInCart"
-                },
-                createdAt: { $first: "$createdAt" },
-                updatedAt: { $first: "updatedAt" }
-            }
-        }
-    ]);
+    // let cart = await Cart.aggregate([
+    //     {
+    //         $match: {
+    //             _id: cartId
+    //         }
+    //     },
+    //     {
+    //         $unwind: "$productsList"
+    //     },
+    //     {
+    //         $lookup: {
+    //             from: "products",
+    //             localField: "productsList.productId",
+    //             foreignField: "_id",
+    //             as: "productDetails"
+    //         }
+    //     },
+    //     {
+    //         $unwind: "$productDetails"
+    //     },
+    //     {
+    //         $group: {
+    //             _id: "$_id",
+    //             customerId: {
+    //                 $first : "$customerId"
+    //             },
+    //             productsList: {
+    //                 $push: {
+    //                     productId: "$productsList.productId",
+    //                     quantity: "$productsList.quantity",
+    //                     totalCost: "$productsList.totalCost",
+    //                     isAvailable: "$productsList.isAvailable",
+    //                     dateAdded: "$productsList.dateAdded",
+    //                     productDetails: "$productsList.productDetails"
+    //                 }
+    //             },
+    //             totalPriceOfProductsInCart: {
+    //                 $first: "$totalPriceOfProductsInCart"
+    //             },
+    //             createdAt: { $first: "$createdAt" },
+    //             updatedAt: { $first: "updatedAt" }
+    //         }
+    //     }
+    // ]);
 
-    if ( cart.length === 0 ){
-        throw new ApiError(
-            400,
-            "Bad Request, the cart is empty"
-        );
-    };
+    // if ( cart.length === 0 ){
+    //     throw new ApiError(
+    //         400,
+    //         "Bad Request, the cart is empty"
+    //     );
+    // };
 
     let user = await User.findById(req.user._id).select(
         "-password -refreshToken"
     );
 
-    if ( !user.shippingAddress && !shippingAddress ) {
-        throw new ApiError(
-            400,
-            "Bad Request, User should provide the shipping address"
-        );
-    };
+    // if ( !user.shippingAddress && !shippingAddress ) {
+    //     throw new ApiError(
+    //         400,
+    //         "Bad Request, User should provide the shipping address"
+    //     );
+    // };
 
-    const orderShippingAddress = ( shippingAddress ) ? shippingAddress : user.shippingAddress[user.shippingAddress?.length - 1];
+    // const orderShippingAddress = ( shippingAddress ) ? shippingAddress : user.shippingAddress[user.shippingAddress?.length - 1];
 
     // now do other checking and also modify user model for shipping address 
 
     let order = new Order({
         customerId: user._id,
-        shippingAddress: {
-            address: orderShippingAddress.address,
-            postalCode: orderShippingAddress.postalCode,
-            otherInformation: ( orderShippingAddress.otherInformation ) ? orderShippingAddress.otherInformation : undefined
-        },
-        paymentStatus: "unpaid"
+        // shippingAddress: {
+        //     address: orderShippingAddress.address,
+        //     postalCode: orderShippingAddress.postalCode,
+        //     otherInformation: ( orderShippingAddress.otherInformation ) ? orderShippingAddress.otherInformation : undefined
+        // },
+        paymentStatus: "unpaid",
+        products: []
     });
 
-    for (let product of cart[0].productsList) {
+    for (let product of products) {
+        console.log(product._id)
         let productPurchased = await Product.findOne(
-            { _id: product.productId },
-            { isAvailable: true }
+            { _id: product._id,
+                isAvailable: true
+             }
         );
+
         if ( !productPurchased ) {
             throw new ApiError(
                 400,
-                `Bad Request, ${product.productId} is not available.`
+                `Bad Request, ${product._id} is not available.`
             );
         };
-
-        if ( productPurchased.quantity < product.quantity ) {
+        console.log(product);
+        console.log(productPurchased);
+        if ( productPurchased.quantity < Number(product.quantity) ) {
             throw new ApiError(
                 400,
                 `Bad Request, ${productPurchased.Title}'s required quantity is not available in stock.`
             )
         };
-        productPurchased.quantity -= product.quantity;
+        productPurchased.quantity = productPurchased.quantity - Number(product.quantity);
 
 
         order.products.push(
             {
-                productId: product.productId,
-                productTitle: productPurchased.Title,
+                productId: productPurchased._id,
+                productTitle: productPurchased.title,
                 rate: productPurchased.price,
-                quantity: product.quantity
+                quantity: Number(product.quantity)
 
             }
         );
 
-        await productPurchased.save();
+        await productPurchased.save({
+            validateBeforeSave: false
+        });
         
         if ( !user.purchasedProducts ) {
             user.purchasedProducts = [
                 {
-                    productId: product.productId
+                    productId: productPurchased._id
                 }
             ]
         } else {
             user.purchasedProducts.push(
                 {
-                    productId: product.productId
+                    productId: productPurchased._id
                 }
             )
         }
         
     }
-    
-    await user.save();
+    order.totalAmountBeforeTaxWithoutDiscount = (amountBeforeTax);
+    order.totalAmountAfterTax = (totalAfterTax);
+
+    await user.save({validateBeforeSave: false});
 
     await order.save();
 
     let checkOrder = await Order.findById(order._id);
+    console.log(checkOrder);
     if ( !checkOrder ) {
         throw new ApiError(
             500,
