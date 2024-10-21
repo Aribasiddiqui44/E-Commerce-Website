@@ -97,6 +97,11 @@ const Product = (props) => {
       }
 
   }
+
+  const availability = props.quantity > 0 ? 
+  { color: 'green', text: 'In Stock' }
+  : { color: 'red', text: 'Out of Stock' };
+
   return (
     <div className="flex flex-row flex-wrap">
       <div className="w-full relative group">
@@ -117,19 +122,26 @@ const Product = (props) => {
               </li> */}
               <li
                 onClick={() =>
-                  dispatch(
-                    addToCart({
-                      _id: props._id,
-                      name: props.productName,
-                      quantity: 1,
-                      image: props.img,
-                      badge: props.badge,
-                      price: props.price,
-                      colors: props.color,
-                    })
-                  )
+                  props.quantity > 0
+                    ? dispatch(
+                        addToCart({
+                          _id: props._id,
+                          name: props.productName,
+                          quantity: 1,
+                          image: props.img,
+                          badge: props.badge,
+                          price: props.price,
+                          colors: props.color,
+                        })
+                      )
+                    : null
                 }
-                className="text-[#767676] hover:text-primeColor text-sm font-normal border-b-[1px] border-b-gray-200 hover:border-b-primeColor flex items-center justify-end gap-2 hover:cursor-pointer pb-1 duration-300 w-full"
+                className={`text-sm font-normal border-b-[1px] border-b-gray-200 flex items-center 
+                  justify-end gap-2 pb-1 duration-300 w-full ${
+                  props.quantity > 0
+                    ? "hover:text-primeColor hover:border-b-primeColor hover:cursor-pointer"
+                    : "text-gray-400 border-b-gray-300 cursor-not-allowed"
+                }`}
               >
                 Add to Cart
                 <span>
@@ -190,6 +202,14 @@ const Product = (props) => {
           <div>
             <p className="text-[#767676] text-[14px]">{props.color}</p>
           </div>
+          <div>
+            <p 
+              className={`text-[${availability.color}] text-[14px] font-bold`}
+              style={{ color: availability.color }}
+            >
+              {availability.text}
+            </p>
+        </div>
         </div>
       </div>
     </div>

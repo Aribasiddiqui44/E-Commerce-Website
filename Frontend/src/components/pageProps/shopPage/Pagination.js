@@ -295,6 +295,7 @@ const Pagination = ({ itemsPerPage }) => {
               color={item.color}
               badge={item.badge}
               des={item.description}
+              quantity={item.quantity}
             />
           </div>
         ))}

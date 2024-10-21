@@ -196,6 +196,7 @@ const NewArrivals = () => {
               color={product.color}
               badge={product.badge}
               des={product.description}
+              quantity={product.quantity}
             />
           </div>
         ))}
