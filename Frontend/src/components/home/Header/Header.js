@@ -92,14 +92,14 @@ const Header = () => {
                       ))}
                     </ul>
                     <div className="mt-4">
-                      <h1
+                      {/* <h1
                         onClick={() => setCategory(!category)}
                         className="flex justify-between text-base cursor-pointer items-center font-titleFont mb-2"
                       >
                         Shop by Category{" "}
                         <span className="text-lg">{category ? "-" : "+"}</span>
-                      </h1>
-                      {category && (
+                      </h1> */}
+                      {/* {category && (
                         <motion.ul
                           initial={{ y: 15, opacity: 0 }}
                           animate={{ y: 0, opacity: 1 }}
@@ -112,9 +112,9 @@ const Header = () => {
                           <li className="headerSedenavLi">Electronics</li>
                           <li className="headerSedenavLi">Others</li>
                         </motion.ul>
-                      )}
+                      )} */}
                     </div>
-                    <div className="mt-4">
+                    {/* <div className="mt-4">
                       <h1
                         onClick={() => setBrand(!brand)}
                         className="flex justify-between text-base cursor-pointer items-center font-titleFont mb-2"
@@ -136,7 +136,7 @@ const Header = () => {
                           <li className="headerSedenavLi">Others</li>
                         </motion.ul>
                       )}
-                    </div>
+                    </div> */}
                   </div>
                   <span
                     onClick={() => setSidenav(false)}
