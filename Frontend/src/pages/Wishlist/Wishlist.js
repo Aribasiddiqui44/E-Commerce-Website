@@ -30,8 +30,15 @@ const Wishlist = () => {
                 }
             });
             console.log(response.data.data);
-            setWishlist(response.data.data.products);
-            setLoading(false);
+            if(response.data.data.products){
+              setWishlist(response.data.data.products);
+              setLoading(false);
+            } else{
+              setWishlist([]);
+              setLoading(false);
+            }
+            console.log(response.data.data.products);  
+              
           } catch (err) {
             setError(err.message);
             setLoading(false);
@@ -88,3 +95,4 @@ const Wishlist = () => {
 };
 
 export default Wishlist;
+
