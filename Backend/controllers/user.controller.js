@@ -189,7 +189,84 @@ const getUserData = async (req, res) => {
 
 //  });
 
+const validateLoginRequest = (usernameOremail, password) => {
+    if (!usernameOremail || !password) {
+        throw new ApiError(400, "Username/email and password are required.");
+    }
+};
 
+const findUserByUsernameOrEmail = async (usernameOremail) => {
+    const user = await User.findOne({
+        $or: [
+            { username: usernameOremail },
+            { email: usernameOremail }
+        ]
+    });
+    if (!user) {
+        throw new ApiError(404, "User does not exist.");
+    }
+    return user;
+};
+
+const validateUserPassword = async (user, password) => {
+    const isPasswordValid = await user.passwordValidator(password);
+    if (!isPasswordValid) {
+        throw new ApiError(401, "Invalid user credentials.");
+    }
+};
+
+const generateTokens = async (userId) => {
+    return await generateAccessAndRefreshTokens(userId);
+};
+
+const fetchUserForResponse = async (userId) => {
+    return await User.findById(userId).select("-password -refreshToken");
+};
+
+const getCookieOptions = () => {
+    return {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        path: "/"
+    };
+};
+
+const setLoginCookies = (res, accessToken, refreshToken, options) => {
+    res.cookie("accessToken", accessToken, options);
+    res.cookie("refreshToken", refreshToken, options);
+};
+
+const sendSuccessResponse = (res, user, accessToken, refreshToken) => {
+    return res.status(200).json(
+        new ApiResponse(200, { user, accessToken, refreshToken }, "User logged in successfully")
+    );
+};
+
+const postLoginUser = asyncHandler(async (req, res) => {
+    const { usernameOremail, password } = req.body;
+
+    // Validate request body
+    validateLoginRequest(usernameOremail, password);
+
+    // Find the user by email or username
+    const user = await findUserByUsernameOrEmail(usernameOremail);
+
+    // Validate password
+    await validateUserPassword(user, password);
+
+    // Generate access and refresh tokens
+    const { accessToken, refreshToken } = await generateTokens(user._id);
+
+    // Get user details without password and refreshToken
+    const loggedInUser = await fetchUserForResponse(user._id);
+
+    // Set cookie options
+    const cookieOptions = getCookieOptions();
+
+    // Set cookies and send response
+    setLoginCookies(res, accessToken, refreshToken, cookieOptions);
+    return sendSuccessResponse(res, loggedInUser, accessToken, refreshToken);
+});
 
 const logoutUser = asyncHandler( async (req, res) => {
     await User.findByIdAndUpdate(
