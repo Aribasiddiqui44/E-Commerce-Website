@@ -1,37 +1,22 @@
-// import React from 'react';
-// import { Link } from 'react-router-dom';
-// import './PaymentSuccessPage.css';
-// import { FaCheckCircle } from 'react-icons/fa';
-
-// const Success = () => {
-//   return (
-//     <div className="container1">
-//       <div className="card1">
-//         <div className="carddd">        
-//           <h1>Payment Successful</h1>
-//             <div>
-//               <FaCheckCircle className="tick-icon" />
-//             </div> 
-//           </div> 
-//           <div>
-//         <Link to="/shop">
-//           <button className="w-52 h-10 bg-primeColor text-white hover:bg-black duration-300">
-//             Continue Shopping
-//           </button>
-//         </Link>
-//       </div>
-//       </div>
-//     </div>
-//   );
-// }
-// export default Success;
-
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaCheckCircle } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
+import { resetCart } from "../../redux/orebiSlice";
 
 const Success = () => {
+  const [isCart, setIsCart] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleCartReset = () => {
+    setIsCart(true);
+    dispatch(resetCart()); 
+  };
+
+  useEffect(() => {
+    handleCartReset();
+  }, []);
+
   return (
     <div className="flex items-center justify-center h-screen bg-gray-200">
       <div className="bg-white p-8 rounded-lg shadow-lg text-center transform transition-transform duration-500 ease-out" style={{ animation: 'fadeIn 1s ease-out' }}>
@@ -59,6 +44,6 @@ const Success = () => {
       `}</style>
     </div>
   );
-}
+};
 
 export default Success;
