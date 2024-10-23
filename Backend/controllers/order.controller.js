@@ -17,183 +17,118 @@ const getOrderHistory = asyncHandler( async (req, res) => {
     // get history of orders by user.
 });
 
-const postPlaceOrder = asyncHandler( async (req, res) => {
-    const { shippingAddress, products, amountBeforeTax, totalAfterTax } = req.body;
-    // if ( !cartId ){
-    //     throw new ApiError(
-    //         400,
-    //         "Bad Request, need the cartId"
-    //     );
-    // };
-    // take cart
-    // place the products of cart in order
-    // make payment object with payment amount of order.
-    // check if the shipping address provided.
-    // check if the user is already having a shipping address in user model.
-    // add that shipping address either coming or from user to order , which was present.
-    // then add that payment object to the newly created order.
-    // then empty the cart 
-    // add these products to user's purchased products array, if not initiated as of now, then initiate it and add these elements.
-    // return the response with this order object.
-    
-    // let cart = await Cart.findById(cartId);
+// Extracted function to fetch the user
+const fetchUserById = async (userId) => {
+    return await User.findById(userId).select("-password -refreshToken");
+};
 
-    // let cart = await Cart.aggregate([
-    //     {
-    //         $match: {
-    //             _id: cartId
-    //         }
-    //     },
-    //     {
-    //         $unwind: "$productsList"
-    //     },
-    //     {
-    //         $lookup: {
-    //             from: "products",
-    //             localField: "productsList.productId",
-    //             foreignField: "_id",
-    //             as: "productDetails"
-    //         }
-    //     },
-    //     {
-    //         $unwind: "$productDetails"
-    //     },
-    //     {
-    //         $group: {
-    //             _id: "$_id",
-    //             customerId: {
-    //                 $first : "$customerId"
-    //             },
-    //             productsList: {
-    //                 $push: {
-    //                     productId: "$productsList.productId",
-    //                     quantity: "$productsList.quantity",
-    //                     totalCost: "$productsList.totalCost",
-    //                     isAvailable: "$productsList.isAvailable",
-    //                     dateAdded: "$productsList.dateAdded",
-    //                     productDetails: "$productsList.productDetails"
-    //                 }
-    //             },
-    //             totalPriceOfProductsInCart: {
-    //                 $first: "$totalPriceOfProductsInCart"
-    //             },
-    //             createdAt: { $first: "$createdAt" },
-    //             updatedAt: { $first: "updatedAt" }
-    //         }
-    //     }
-    // ]);
-
-    // if ( cart.length === 0 ){
-    //     throw new ApiError(
-    //         400,
-    //         "Bad Request, the cart is empty"
-    //     );
-    // };
-
-    let user = await User.findById(req.user._id).select(
-        "-password -refreshToken"
-    );
-
-    // if ( !user.shippingAddress && !shippingAddress ) {
-    //     throw new ApiError(
-    //         400,
-    //         "Bad Request, User should provide the shipping address"
-    //     );
-    // };
-
-    // const orderShippingAddress = ( shippingAddress ) ? shippingAddress : user.shippingAddress[user.shippingAddress?.length - 1];
-
-    // now do other checking and also modify user model for shipping address 
-
-    let order = new Order({
+// Extracted function to initialize the order
+const initializeOrder = async (user) => {
+    return new Order({
         customerId: user._id,
-        // shippingAddress: {
-        //     address: orderShippingAddress.address,
-        //     postalCode: orderShippingAddress.postalCode,
-        //     otherInformation: ( orderShippingAddress.otherInformation ) ? orderShippingAddress.otherInformation : undefined
-        // },
         paymentStatus: "unpaid",
         products: []
     });
+};
 
+// Extracted function to handle all product logic for the order
+const handleProductsForOrder = async (products, order, user) => {
     for (let product of products) {
-        console.log(product._id)
-        let productPurchased = await Product.findOne(
-            { _id: product._id,
-                isAvailable: true
-             }
-        );
-
-        if ( !productPurchased ) {
-            throw new ApiError(
-                400,
-                `Bad Request, ${product._id} is not available.`
-            );
-        };
-        console.log(product);
-        console.log(productPurchased);
-        if ( productPurchased.quantity < Number(product.quantity) ) {
-            throw new ApiError(
-                400,
-                `Bad Request, ${productPurchased.Title}'s required quantity is not available in stock.`
-            )
-        };
-        productPurchased.quantity = productPurchased.quantity - Number(product.quantity);
-
-
-        order.products.push(
-            {
-                productId: productPurchased._id,
-                productTitle: productPurchased.title,
-                rate: productPurchased.price,
-                quantity: Number(product.quantity)
-
-            }
-        );
-
-        await productPurchased.save({
-            validateBeforeSave: false
-        });
+        let productPurchased = await validateProductAvailability(product._id);
+        validateProductQuantity(productPurchased, product.quantity);
         
-        if ( !user.purchasedProducts ) {
-            user.purchasedProducts = [
-                {
-                    productId: productPurchased._id
-                }
-            ]
-        } else {
-            user.purchasedProducts.push(
-                {
-                    productId: productPurchased._id
-                }
-            )
-        }
+        updateProductStock(productPurchased, product.quantity);
         
+        addProductToOrder(order, productPurchased, product.quantity);
+        
+        await productPurchased.save({ validateBeforeSave: false });
+        updateUserPurchasedProducts(user, productPurchased);
     }
-    order.totalAmountBeforeTaxWithoutDiscount = (amountBeforeTax);
-    order.totalAmountAfterTax = (totalAfterTax);
+};
 
-    await user.save({validateBeforeSave: false});
+// Extracted function to check product availability
+const validateProductAvailability = async (productId) => {
+    let productPurchased = await Product.findOne({ _id: productId, isAvailable: true });
+    
+    if (!productPurchased) {
+        throw new ApiError(400, `Bad Request, ${productId} is not available.`);
+    }
+    
+    return productPurchased;
+};
 
+// Extracted function to validate product quantity
+const validateProductQuantity = (productPurchased, requiredQuantity) => {
+    if (productPurchased.quantity < Number(requiredQuantity)) {
+        throw new ApiError(
+            400,
+            `Bad Request, ${productPurchased.title}'s required quantity is not available in stock.`
+        );
+    }
+};
+
+// Extracted function to update product stock
+const updateProductStock = (productPurchased, quantity) => {
+    productPurchased.quantity -= Number(quantity);
+};
+
+// Extracted function to add product to order
+const addProductToOrder = (order, productPurchased, quantity) => {
+    order.products.push({
+        productId: productPurchased._id,
+        productTitle: productPurchased.title,
+        rate: productPurchased.price,
+        quantity: Number(quantity)
+    });
+};
+
+// Extracted function to update user's purchased products
+const updateUserPurchasedProducts = (user, productPurchased) => {
+    if (!user.purchasedProducts) {
+        user.purchasedProducts = [{ productId: productPurchased._id }];
+    } else {
+        user.purchasedProducts.push({ productId: productPurchased._id });
+    }
+};
+
+// Extracted function to finalize order amounts
+const finalizeOrderAmounts = (order, amountBeforeTax, totalAfterTax) => {
+    order.totalAmountBeforeTaxWithoutDiscount = amountBeforeTax;
+    order.totalAmountAfterTax = totalAfterTax;
+};
+
+// Extracted function to validate order placement
+const validateOrderPlacement = async (order) => {
+    let checkOrder = await Order.findById(order._id);
+    
+    if (!checkOrder) {
+        throw new ApiError(500, "Internal Server Error! Something went wrong when placing the order. Please try again.");
+    }
+};
+
+
+const postPlaceOrder = asyncHandler(async (req, res) => {
+    const { shippingAddress, products, amountBeforeTax, totalAfterTax } = req.body;
+    
+    let user = await fetchUserById(req.user._id);
+    
+    let order = await initializeOrder(user);
+    
+    await handleProductsForOrder(products, order, user);
+
+    finalizeOrderAmounts(order, amountBeforeTax, totalAfterTax);
+
+    await user.save({ validateBeforeSave: false });
     await order.save();
 
-    let checkOrder = await Order.findById(order._id);
-    console.log(checkOrder);
-    if ( !checkOrder ) {
-        throw new ApiError(
-            500,
-            "Internal Server Error! Something went wrong when placing order. Please Try again."
-        );
-    };
+    await validateOrderPlacement(order);
 
-    res.status(201).json(
-        201,
+    res.status(201).json({
+        status: 201,
         order,
-        "Order placed successfully"
-    )
-
+        message: "Order placed successfully"
+    });
 });
-
 
 module.exports = {
     getOrdersOfUser,
