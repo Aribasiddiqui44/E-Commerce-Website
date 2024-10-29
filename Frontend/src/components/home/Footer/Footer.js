@@ -37,7 +37,7 @@ const Footer = () => {
             your go-to for stylish home décor and seamless shopping with secure cryptocurrency payments.
             </p>
             <ul className="flex items-center gap-2">
-              <a
+              {/* <a
                 href="https://www.youtube.com/@reactjsBD"
                 target="_blank"
                 rel="noreferrer"
@@ -45,9 +45,9 @@ const Footer = () => {
                 <li className="w-7 h-7 bg-primeColor text-gray-100 hover:text-white cursor-pointer text-lg rounded-full flex justify-center items-center hover:bg-black duration-300">
                   <FaYoutube />
                 </li>
-              </a>
+              </a> */}
               <a
-                href="https://github.com/noorjsdivs"
+                href="https://github.com/KhawarGit"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -56,7 +56,7 @@ const Footer = () => {
                 </li>
               </a>
               <a
-                href="https://www.facebook.com/Noorlalu143/"
+                href="https://www.facebook.com"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -65,7 +65,7 @@ const Footer = () => {
                 </li>
               </a>
               <a
-                href="https://www.linkedin.com/in/noor-mohammad-ab2245193/"
+                href="https://www.linkedin.com/in/khawar-khan/"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -77,7 +77,7 @@ const Footer = () => {
           </div>
         </div>
         <div>
-          <FooterListTitle title="Shop" />
+          {/* <FooterListTitle title="Shop" />
           <ul className="flex flex-col gap-2">
             <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
               Accesories
@@ -94,10 +94,10 @@ const Footer = () => {
             <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
               New Arrivals
             </li>
-          </ul>
+          </ul> */}
         </div>
         <div>
-          <FooterListTitle title="Your account" />
+          {/* <FooterListTitle title="Your account" />
           <ul className="flex flex-col gap-2">
             <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
               Profile
@@ -114,7 +114,7 @@ const Footer = () => {
             <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
               Payment Options
             </li>
-          </ul>
+          </ul> */}
         {/* </div>
         <div className="col-span-2 flex flex-col items-center w-full px-4">
           <FooterListTitle title="Subscribe to our newsletter." />
