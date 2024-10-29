@@ -78,40 +78,45 @@ const getWishlistOfUser = asyncHandler( async (req, res) => {
     )
 });
 
-const addProductToWishlist = async (userId, productId) => {
-    const wishlist = await Wishlist.findOneAndUpdate(
-        { userId }, // Filter by userId
-        { 
-            $addToSet: { products: productId }  // Add product to wishlist without duplicates
-        }, 
-        { 
-            new: true, 
-            upsert: true  // Create if it doesn't exist
+const postAddWishlistOfUser = asyncHandler( async(req, res) => {
+    const { productId } = req.body;
+    let checkWishlist = await Wishlist.findOne({
+        userId: req.user._id
+    });
+    if ( checkWishlist ){
+        throw new ApiError(
+            400,
+            "Bad Request! User already has a wishlist"
+        )
+    }
+
+    let wishlistCreate = await Wishlist.create(
+        {
+            userId: req.user._id,
+            products: [
+                productId
+            ]
         }
     );
-    
-    return wishlist;
-};
 
-const postAddWishlistOfUser = asyncHandler(async (req, res) => {
-    const { productId } = req.body;
+    let checkWishlistCreated = await Wishlist.findById(wishlistCreate._id);
 
-    // Add product to user's wishlist (create if not exists)
-    const wishlist = await addProductToWishlist(req.user._id, productId);
-
-    // Check if wishlist creation or update was successful
-    if (!wishlist) {
-        throw new ApiError(500, "Internal Server Error! Something went wrong when creating or updating wishlist");
-    }
+    if( !checkWishlistCreated ){
+        throw new ApiError(
+            500,
+            "Internal Server Error! Something went wrong when creating wishlist"
+        )
+    };
 
     res.status(201).json(
         new ApiResponse(
             200,
-            { wishlist },
-            "Product added to wishlist successfully"
+            "Wishlist Created Successfully"
         )
     );
-});
+}
+);
+
 const patchWishlist = asyncHandler( async (req, res) => {
     // for adding roducts into wishlist.
     const { productId } = req.body;

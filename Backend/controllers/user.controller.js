@@ -34,131 +34,160 @@ const getUserData = async (req, res) => {
 
 };
 
-const registerUser = async (userData) => {
-    const { fullName, email, password, username } = userData;
+ const postRegisterUser = asyncHandler( async (req, res) => {
+    // get user details from frontend.
+    // validation - not empty
+    // check if user already exists - username and email
+    // check for images, check for avatar upload file
+    // upload the images on cloudinary, avatar
+    // create user object - create entry in db
+    // remover password and refresh token field from response
+    // check for user creation
+    // return res
 
-    // Create the new user
+    //getting user details from frontend
+    const { fullName, email, password, username} = req.body;
+    console.log("email:", email);
+
+    if (
+        [fullName, email, password, username].some((field) => field?.trim() === "")
+    ) {
+        throw new ApiError(400, "All fields are required");
+    };
+
+    //checking if user already exists.
+    const existeduser = await User.findOne({
+        $or: [{ username }, { email }]
+    });
+
+    if(existeduser){
+        throw new ApiError(409, "User with email or username already exists.");   
+    };
+
+    // now working with upload files, avatar.
+    const avatarLocalPath = req.files?.avatar[0]?.path;
+
+    // if(!avatarLocalPath){
+    //     throw new ApiError(400, "Avatar file is required.");
+    // };
+
+    // const avatar = await uploadOnCloudinary(avatarLocalPath);
+
+    // if(!avatar){
+    //     throw new ApiError(500, "Internal server error when uploading file, so upload file again.")
+    // };
+
     const newUser = await User.create({
         fullName,
+        // avatar: avatar.url,
         email,
         password,
-        username,
+        username
     });
 
-    // Create wishlist and cart for the user
-    const wishlist = await Wishlist.create({ userId: newUser._id, products: [] });
-    const cart = await Cart.create({ customerId: newUser._id, productsList: [] });
+    //check if user is created.
+    let checkUser = await User.findById(newUser._id).select(
+        "-password -refreshToken"
+    );
+    let wishlist = await Wishlist.create(
+        {
+            userId: checkUser._id,
+            products: []
+        }
+    );
+    let cart = await Cart.create({
+        customerId: checkUser._id,
+        productsList: []
+    });
 
-    return newUser;
-};
 
-const postRegisterUser = asyncHandler(async (req, res) => {
-    const { fullName, email, password, username } = req.body;
-
-    // Basic input validation
-    if (!fullName || !email || !password || !username) {
-        throw new ApiError(400, "All fields are required.");
-    }
-
-    // Checking if the user already exists
-    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
-
-    if (existingUser) {
-        throw new ApiError(409, "User with this email or username already exists.");
-    }
-
-    // Register the user
-    const newUser = await registerUser({ fullName, email, password, username });
-
-    if (!newUser) {
-        throw new ApiError(500, "Internal Server Error. Failed to create the user.");
-    }
-
-    const userResponse = await User.findById(newUser._id).select("-password -refreshToken");
+    if(!checkUser){
+        throw new ApiError(500, "Internal Server Error. Something went wrong while creating user on Mongo.")
+    };
 
     return res.status(201).json(
-        new ApiResponse(200, userResponse, "User registered successfully.")
+        new ApiResponse(200, checkUser, "User Registered Successfully")
     );
-});
 
-const validateLoginRequest = (usernameOremail, password) => {
-    if (!usernameOremail || !password) {
-        throw new ApiError(400, "Username/email and password are required.");
-    }
-};
+ });
 
-const findUserByUsernameOrEmail = async (usernameOremail) => {
+ const postLoginUser = asyncHandler ( async (req, res) => {
+    //ALGO
+    // req body -> data
+    // username or email
+    // find the user
+    // password check
+    // generate access and refresh token 
+    // send cookie
+
+    // console.log(req.body)
+    const {usernameOremail, password} = req.body;
+    // const username = req.body.username;
+    // const 
+
+    if (!usernameOremail){
+        throw new ApiError(400, "username or email is required");
+    };
+
     const user = await User.findOne({
         $or: [
-            { username: usernameOremail },
-            { email: usernameOremail }
+            {username: usernameOremail},
+            {email: usernameOremail}
         ]
     });
-    if (!user) {
-        throw new ApiError(404, "User does not exist.");
-    }
-    return user;
-};
 
-const validateUserPassword = async (user, password) => {
+    if (!user){
+        throw new ApiError(404, "User does not exist");
+    };
+
     const isPasswordValid = await user.passwordValidator(password);
-    if (!isPasswordValid) {
-        throw new ApiError(401, "Invalid user credentials.");
-    }
-};
 
-const generateTokens = async (userId) => {
-    return await generateAccessAndRefreshTokens(userId);
-};
+    if (!isPasswordValid){
+        // if password is invalid
+        throw new ApiError(401, "Invalid user credentials")
+    };
 
-const fetchUserForResponse = async (userId) => {
-    return await User.findById(userId).select("-password -refreshToken");
-};
+    // for generating access and refresh tokens.
+    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);
 
-const getCookieOptions = () => {
-    return {
+    // taking logged in user for sending back the response.
+    const loggedInUser = await User.findById(user._id).select(
+        "-password -refreshToken"
+    );
+
+    // creating and configuring cookie
+    const options = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: true,
+        // sameSite: 'None',
+        // domain: "http://localhost:3000",
         path: "/"
     };
-};
 
-const setLoginCookies = (res, accessToken, refreshToken, options) => {
-    res.cookie("accessToken", accessToken, options);
-    res.cookie("refreshToken", refreshToken, options);
-};
+    // const options = {
+    //     httpOnly: true,
+    //     secure: false, // Set to true if HTTPS is used in production
+    //     sameSite: 'None', // Adjust based on your requirements
+    //     path: '/', // Ensure the cookie is accessible site-wide
+    //     domain: 'localhost', // Domain of your frontend application
+    // };
 
-const sendSuccessResponse = (res, user, accessToken, refreshToken) => {
-    return res.status(200).json(
-        new ApiResponse(200, { user, accessToken, refreshToken }, "User logged in successfully")
-    );
-};
+    return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+        new ApiResponse(
+            200,
+            {
+                user: loggedInUser,accessToken, refreshToken
+            },
+            "User logged in successfully"
+        )
+    )
 
-const postLoginUser = asyncHandler(async (req, res) => {
-    const { usernameOremail, password } = req.body;
 
-    // Validate request body
-    validateLoginRequest(usernameOremail, password);
-
-    // Find the user by email or username
-    const user = await findUserByUsernameOrEmail(usernameOremail);
-
-    // Validate password
-    await validateUserPassword(user, password);
-
-    // Generate access and refresh tokens
-    const { accessToken, refreshToken } = await generateTokens(user._id);
-
-    // Get user details without password and refreshToken
-    const loggedInUser = await fetchUserForResponse(user._id);
-
-    // Set cookie options
-    const cookieOptions = getCookieOptions();
-
-    // Set cookies and send response
-    setLoginCookies(res, accessToken, refreshToken, cookieOptions);
-    return sendSuccessResponse(res, loggedInUser, accessToken, refreshToken);
-});
+ });
 
 const logoutUser = asyncHandler( async (req, res) => {
     await User.findByIdAndUpdate(
